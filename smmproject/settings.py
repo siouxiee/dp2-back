@@ -80,10 +80,10 @@ WSGI_APPLICATION = 'smmproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dp',
+        'NAME': 'prueba_redes',
         'USER': 'postgres',
-        'PASSWORD': 'omen1234DP2',
-        'HOST': 'dbsmm.cqorxujztn8p.us-east-1.rds.amazonaws.com',  # o la IP de tu servidor de PostgreSQL
+        'PASSWORD': 'S2vwLU8uJMf',
+        'HOST': 'ecommerce-db.cy6fsvtblkt9.us-east-1.rds.amazonaws.com',  # o la IP de tu servidor de PostgreSQL
         'PORT': '5432',
     }
 }
