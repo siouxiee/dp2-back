@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     'marketing_campaigns',
     'social_management',
     'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -51,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'smmproject.urls'
@@ -73,6 +76,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'smmproject.wsgi.application'
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Puerto Frontend
+]
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -80,10 +86,10 @@ WSGI_APPLICATION = 'smmproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dp',
+        'NAME': 'prueba_redes',
         'USER': 'postgres',
-        'PASSWORD': 'omen1234DP2',
-        'HOST': 'dbsmm.cqorxujztn8p.us-east-1.rds.amazonaws.com',  # o la IP de tu servidor de PostgreSQL
+        'PASSWORD': 'S2vwLU8uJMf',
+        'HOST': 'ecommerce-db.cy6fsvtblkt9.us-east-1.rds.amazonaws.com',  # o la IP de tu servidor de PostgreSQL
         'PORT': '5432',
     }
 }
@@ -129,3 +135,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+TIKTOK_CLIENT_ID = config('TIKTOK_CLIENT_ID')
+TIKTOK_CLIENT_SECRET = config('TIKTOK_CLIENT_SECRET')
