@@ -16,8 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('customer_analytics/', include('customer_analytics.urls')),
+    path('', views.index, name='index'),  # Ruta para la página de inicio
 ]
