@@ -22,4 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('customer_analytics/', include('customer_analytics.urls')),
     path('', views.index, name='index'),  # Ruta para la página de inicio
+    path('accounts/', include('allauth.urls')),
 ]
