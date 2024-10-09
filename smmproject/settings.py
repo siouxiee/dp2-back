@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-tr(p6ex$ewh*+0s6p)i@18m9q3y00qk(=le(og&^j_a%1e)^jq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['54.164.197.243']
 
 
 # Application definition
@@ -85,6 +85,7 @@ WSGI_APPLICATION = 'smmproject.wsgi.application'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # Puerto Frontend
+    "https://helado-villaizan.vercel.app"
 ]
 
 # Database
