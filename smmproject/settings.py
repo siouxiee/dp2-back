@@ -83,7 +83,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'smmproject.wsgi.application'
 
-CORS_ALLOWED_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
