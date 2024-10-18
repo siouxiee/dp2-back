@@ -39,13 +39,23 @@ class ReporteRedes(models.Model):
 class Post(models.Model):
     cuenta = models.ForeignKey(CuentaRedSocial, on_delete=models.CASCADE, related_name='posts')
     contenido = models.TextField()
-    imagen_url = models.URLField(null=True, blank=True)
-    video_url = models.URLField(null=True, blank=True)
+    #imagen_url = models.URLField(null=True, blank=True)
+    #video_url = models.URLField(null=True, blank=True)
+    link = models.URLField(null=True, blank=True)
+    preview = models.URLField(null=True, blank=True)
+    media = models.URLField(null=True, blank=True)
+
     fecha_publicacion = models.DateField()
+    #No mostrar
     fecha_creacion = models.DateField(auto_now_add=True)
     fecha_modificacion = models.DateField(auto_now=True)
-    usuario_creacion = models.IntegerField()
-    usuario_modificacion = models.IntegerField()
+    
+    #usuario_creacion = models.IntegerField()
+    #usuario_modificacion = models.IntegerField()
+    
+    is_programmed = models.BooleanField(default=False)
+    programmed_post_time = models.DateTimeField(null=True, blank=True)
+    
     ESTADO_CHOICES = [
         ('P', 'Programado'),
         ('Pu', 'Publicado'),
@@ -53,7 +63,15 @@ class Post(models.Model):
         ('B', 'Borrador'),
     ]
     estado = models.CharField(max_length=2, choices=ESTADO_CHOICES)
-    id_red_social = models.CharField(max_length=255, null=True, blank=True)
+    RED_CHOICES = [
+        ('TikTok', 'TikTok'),
+        ('Facebook', 'Facebook'),
+        ('Instagram', 'Instagram'),
+    ]
+    red_social = models.CharField(max_length=255, choices=RED_CHOICES, default='Facebook')
+
+    #crea un campo de nombre tipo que sea string 
+    tipo = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return self.contenido[:50]

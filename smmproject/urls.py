@@ -23,4 +23,5 @@ urlpatterns = [
     path('customer_analytics/', include('customer_analytics.urls')),
     path('', views.index, name='index'),  # Ruta para la página de inicio
     path('accounts/', include('allauth.urls')),
+    path('', include('social_management.urls')),  # Incluir las rutas de la app social_management
 ]
