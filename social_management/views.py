@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -22,6 +21,16 @@ def obtener_cuentas_red_social(request):
     cuentas = CuentaRedSocial.objects.all()
     serializer = CuentaRedSocialSerializer(cuentas, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['DELETE'])
+def eliminar_token(request, pk):
+    try:
+        cuenta = CuentaRedSocial.objects.get(pk=pk)
+    except CuentaRedSocial.DoesNotExist:
+        return Response({"error": "Cuenta no encontrada"}, status=status.HTTP_404_NOT_FOUND)
+
+    cuenta.delete()
+    return Response({"message": "Token eliminado correctamente"}, status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['GET'])
 def obtener_posts_programados(request):

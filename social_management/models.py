@@ -19,12 +19,13 @@ class CuentaRedSocial(models.Model):
     usuario = models.CharField(max_length=100)
     contraseña = models.CharField(max_length=100)
     token_autenticacion = models.CharField(max_length=255)
+    open_id = models.CharField(max_length=255, null=True, blank=True)  # Añadir el campo open_id
     fecha_expiracion_token = models.DateField()
     refresh_token = models.CharField(max_length=255, null=True, blank=True)  # Para renovación automática del token
     tipo_autenticacion = models.CharField(max_length=50, null=True, blank=True)  # Ejemplo: OAuth2
 
     class Meta:
-        db_table = 'vi_cuentaredsocial'  # Prefijo 'vi_' para la tabla
+        db_table = 'vi_cuentaredsocial'
 
     def __str__(self):
         return self.usuario
