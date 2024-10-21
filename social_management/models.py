@@ -53,7 +53,7 @@ class Post(models.Model):
     #video_url = models.URLField(null=True, blank=True)
     link = models.URLField(null=True, blank=True)
     preview = models.URLField(null=True, blank=True)
-    media = models.URLField(null=True, blank=True)
+    media = models.FileField(upload_to= 'posts',null=True, blank=True)
 
     fecha_publicacion = models.DateField()
     #No mostrar
