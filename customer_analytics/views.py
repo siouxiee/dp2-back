@@ -1,8 +1,10 @@
-from django.shortcuts import render
-from django.http import JsonResponse
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from .models import Ciudad, Usuario, Producto, ProductoXUsuario, TipoProducto, Subcategoria
+from .serializers import CiudadSerializer, UsuarioSerializer, ProductoSerializer, ProductoXUsuarioSerializer, TipoProductoSerializer, SubcategoriaSerializer
 
 # Servicio para obtener la audiencia por ciudad
+@api_view(['GET'])
 def obtenerAudienciaPorCiudad(request):
     ciudades = Ciudad.objects.all()
     data = []
@@ -12,12 +14,11 @@ def obtenerAudienciaPorCiudad(request):
             'ciudad': ciudad.nombre,
             'audiencia': usuarios_ciudad
         })
-    
-    return JsonResponse({'audiencia': data})
+    return Response({'audiencia': data})
 
 # Servicio para obtener ventas por sabor
+@api_view(['GET'])
 def obtenerVentasPorSabor(request):
-    # Asumiendo que "sabores" están categorizados por Subcategoria
     subcategorias = Subcategoria.objects.all()
     ventas = {}
     
@@ -26,8 +27,10 @@ def obtenerVentasPorSabor(request):
         cantidad = ProductoXUsuario.objects.filter(producto__in=productos).count()
         ventas[subcategoria.nombre] = cantidad
     
-    return JsonResponse({'ventas_sabores': ventas})
+    return Response({'ventas_sabores': ventas})
 
+# Servicio para obtener ventas por producto
+@api_view(['GET'])
 def obtenerVentasPorProducto(request):
     tipos_producto = TipoProducto.objects.all()
     ventas = {}
@@ -37,4 +40,4 @@ def obtenerVentasPorProducto(request):
         cantidad = ProductoXUsuario.objects.filter(producto__in=productos_tipo).count()
         ventas[tipo.nombre] = cantidad
     
-    return JsonResponse({'ventas_tamanos': ventas})
+    return Response({'ventas_tamanos': ventas})

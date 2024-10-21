@@ -2,11 +2,14 @@ from django.db import models
 
 # Create your models here.
 class RedSocial(models.Model):
-
     nombre = models.CharField(max_length=100)
     limite_caracteres = models.IntegerField()
     api_url = models.URLField()  # URL base de la API de la red social
     api_version = models.CharField(max_length=10, null=True, blank=True)  # Ejemplo: v12.0 para Meta
+
+    class Meta:
+        db_table = 'vi_redsocial'  # Prefijo 'vi_' para la tabla
+
     def __str__(self):
         return self.nombre
 
@@ -16,9 +19,13 @@ class CuentaRedSocial(models.Model):
     usuario = models.CharField(max_length=100)
     contraseña = models.CharField(max_length=100)
     token_autenticacion = models.CharField(max_length=255)
+    open_id = models.CharField(max_length=255, null=True, blank=True)  # Añadir el campo open_id
     fecha_expiracion_token = models.DateField()
     refresh_token = models.CharField(max_length=255, null=True, blank=True)  # Para renovación automática del token
     tipo_autenticacion = models.CharField(max_length=50, null=True, blank=True)  # Ejemplo: OAuth2
+
+    class Meta:
+        db_table = 'vi_cuentaredsocial'
 
     def __str__(self):
         return self.usuario
@@ -31,6 +38,9 @@ class ReporteRedes(models.Model):
     total_usuarios = models.IntegerField()
     total_publicaciones = models.IntegerField()
     total_interacciones = models.IntegerField()
+
+    class Meta:
+        db_table = 'vi_reporteredes'  # Prefijo 'vi_' para la tabla
 
     def __str__(self):
         return f"Reporte del {self.fecha_inicio} al {self.fecha_fin}"
@@ -72,13 +82,18 @@ class Post(models.Model):
 
     #crea un campo de nombre tipo que sea string 
     tipo = models.CharField(max_length=255, null=True, blank=True)
+    id_red_social = models.CharField(max_length=255, null=True, blank=True)
+    is_programmed = models.BooleanField(default=False)  # Agregar este campo
+
+    class Meta:
+        db_table = 'vi_post'
 
     def __str__(self):
-        return self.contenido[:50]
+        return self.contenido[:50] if self.contenido else "Post sin contenido"
 
 
 class Interaccion(models.Model):
-    post=models.ForeignKey(Post, on_delete=models.CASCADE, related_name='interacciones')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='interacciones')
     cuenta = models.ForeignKey(CuentaRedSocial, on_delete=models.CASCADE, related_name='interacciones')
     TIPO_CHOICES = [
         ('C', 'Comentario'),
@@ -90,8 +105,13 @@ class Interaccion(models.Model):
     fecha = models.DateField()
     username = models.CharField(max_length=100)
     id_interaccion_red_social = models.CharField(max_length=255, null=True, blank=True)
+
+    class Meta:
+        db_table = 'vi_interaccion'  # Prefijo 'vi_' para la tabla
+
     def __str__(self):
         return f"{self.tipo} de {self.username}"
+
 
 class Segmento(models.Model):
     nombre = models.CharField(max_length=100)
@@ -99,11 +119,19 @@ class Segmento(models.Model):
     criterio = models.TextField()
     fecha_creacion = models.DateField()
     cuenta = models.ForeignKey(CuentaRedSocial, on_delete=models.CASCADE, related_name='segmentos')
+
+    class Meta:
+        db_table = 'vi_segmento'  # Prefijo 'vi_' para la tabla
+
     def __str__(self):
         return self.nombre
 
+
 class Etiqueta(models.Model):
     nombre = models.CharField(max_length=100)
+
+    class Meta:
+        db_table = 'vi_etiqueta'  # Prefijo 'vi_' para la tabla
 
     def __str__(self):
         return self.nombre
@@ -112,6 +140,9 @@ class Etiqueta(models.Model):
 class PostEtiqueta(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     etiqueta = models.ForeignKey(Etiqueta, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'vi_postetiqueta'  # Prefijo 'vi_' para la tabla
 
     def __str__(self):
         return f"Etiqueta: {self.etiqueta.nombre} en Post: {self.post.contenido[:30]}"
