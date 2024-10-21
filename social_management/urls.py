@@ -10,6 +10,6 @@ urlpatterns = [
     path('cuentas/eliminar/<int:pk>/', views.eliminar_token, name='eliminar_token'),
     path('posts/programados/', views.obtener_posts_programados, name='obtener_posts_programados'),
     path('posts/crear/', crear_post, name='crear_post'),
-    path('social_management/videos/upload/', UploadVideoToS3View.as_view(), name='upload_video_to_s3'),
-    path('social_management/videos/publicar/', publicar_video, name='publicar_video_tiktok'),
+    path('videos/upload/', UploadVideoToS3View.as_view(), name='upload_video_to_s3'),
+    path('videos/publicar/', publicar_video, name='publicar_video_tiktok'),
 ]
