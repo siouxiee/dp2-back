@@ -3,14 +3,15 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.views import APIView
-from .models import CuentaRedSocial
-from .models import Post
-from .serializers import CuentaRedSocialSerializer
-from .serializers import PostSerializer
+from .models import CuentaRedSocial, Post
+from .serializers import CuentaRedSocialSerializer, PostSerializer
 from .services import publicar_video_tiktok
 import boto3
-from django.conf import settings
+from botocore.exceptions import NoCredentialsError
 
+# Tus credenciales de AWS
+AWS_ACCESS_KEY = 'ASIAR3IZ5TJHRN766ECK'  # Reemplaza con tu access key
+AWS_SECRET_KEY = 'qJs0wP5RKSA/IVcyqZperXS8p3SmzTfWnpNzS4ZT'  # Reemplaza con tu secret key
 S3_BUCKET = 's3-dp2-villaizan-redes'
 S3_REGION = 'us-east-1'
 
@@ -23,7 +24,13 @@ class UploadVideoToS3View(APIView):
         if not video_file:
             return Response({"error": "No se ha proporcionado un archivo de video"}, status=status.HTTP_400_BAD_REQUEST)
         
-        s3 = boto3.client('s3')
+        # Inicializamos el cliente de S3 con las credenciales proporcionadas
+        s3 = boto3.client(
+            's3',
+            aws_access_key_id=AWS_ACCESS_KEY,
+            aws_secret_access_key=AWS_SECRET_KEY,
+            region_name=S3_REGION
+        )
 
         try:
             # Subir archivo a S3
@@ -40,6 +47,7 @@ class UploadVideoToS3View(APIView):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
 # Vista para crear y guardar una nueva cuenta de red social
 @api_view(['POST'])
 def crear_cuenta_red_social(request):
@@ -49,12 +57,14 @@ def crear_cuenta_red_social(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 # Vista para consultar las credenciales de una cuenta de red social
 @api_view(['GET'])
 def obtener_cuentas_red_social(request):
     cuentas = CuentaRedSocial.objects.all()
     serializer = CuentaRedSocialSerializer(cuentas, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 @api_view(['DELETE'])
 def eliminar_token(request, pk):
@@ -66,6 +76,7 @@ def eliminar_token(request, pk):
     cuenta.delete()
     return Response({"message": "Token eliminado correctamente"}, status=status.HTTP_204_NO_CONTENT)
 
+
 @api_view(['GET'])
 def obtener_posts_programados(request):
     # Filtra los posts programados
@@ -73,6 +84,7 @@ def obtener_posts_programados(request):
     # Serializa los datos
     serializer = PostSerializer(posts_programados, many=True)
     return Response(serializer.data)
+
 
 @api_view(['POST'])
 def crear_post(request):
@@ -82,7 +94,8 @@ def crear_post(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
+
 @api_view(['POST'])
 def publicar_video(request):
     access_token = request.data.get('access_token')
