@@ -8,7 +8,13 @@ class CuentaRedSocialSerializer(serializers.ModelSerializer):
         model = CuentaRedSocial
         fields = '__all__'
 
+#class PostSerializer(serializers.ModelSerializer):
+#    class Meta:
+#        model = Post
+#        fields = '__all__'
+
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = '__all__'
+        exclude = ('fecha_modificacion', 'fecha_creacion')  # Excluir los campos especificados
+        #fields = '__all__'

@@ -83,10 +83,10 @@ class Post(models.Model):
     #crea un campo de nombre tipo que sea string 
     tipo = models.CharField(max_length=255, null=True, blank=True)
     id_red_social = models.CharField(max_length=255, null=True, blank=True)
-    is_programmed = models.BooleanField(default=False)  # Agregar este campo
+    #is_programmed = models.BooleanField(default=False)  # Agregar este campo
 
     class Meta:
-        db_table = 'vi_post'
+       db_table = 'vi_post'
 
     def __str__(self):
         return self.contenido[:50] if self.contenido else "Post sin contenido"
@@ -131,7 +131,7 @@ class Etiqueta(models.Model):
     nombre = models.CharField(max_length=100)
 
     class Meta:
-        db_table = 'vi_etiqueta'  # Prefijo 'vi_' para la tabla
+       db_table = 'vi_etiqueta'  # Prefijo 'vi_' para la tabla
 
     def __str__(self):
         return self.nombre
