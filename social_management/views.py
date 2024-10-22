@@ -8,12 +8,17 @@ from .serializers import CuentaRedSocialSerializer, PostSerializer
 from .services import publicar_video_tiktok
 import boto3
 from botocore.exceptions import NoCredentialsError
+from rest_framework import viewsets
 
 # Tus credenciales de AWS
 AWS_ACCESS_KEY = 'ASIAR3IZ5TJHRN766ECK'  # Reemplaza con tu access key
 AWS_SECRET_KEY = 'qJs0wP5RKSA/IVcyqZperXS8p3SmzTfWnpNzS4ZT'  # Reemplaza con tu secret key
 S3_BUCKET = 's3-dp2-villaizan-redes'
 S3_REGION = 'us-east-1'
+
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
 
 class UploadVideoToS3View(APIView):
     parser_classes = (MultiPartParser, FormParser)

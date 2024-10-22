@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from decouple import config
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -91,7 +92,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'villaizan',
+        'NAME': 'prueba_redes',
         'USER': 'postgres',
         'PASSWORD': 'S2vwLU8uJMf',
         'HOST': 'ecommerce-db.cy6fsvtblkt9.us-east-1.rds.amazonaws.com',  # o la IP de tu servidor de PostgreSQL
@@ -174,3 +175,28 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 TIKTOK_CLIENT_ID = config('TIKTOK_CLIENT_ID')
 TIKTOK_CLIENT_SECRET = config('TIKTOK_CLIENT_SECRET')
+
+env = environ.Env()
+environ.Env.read_env()  # Lee el archivo .env
+
+# Configuración de AWS S3
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME')
+AWS_S3_SIGNATURE_NAME = env('AWS_S3_SIGNATURE_NAME')
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+AWS_S3_VERIFY = True
+AWS_QUERYSTRING_AUTH = False
+# Configuración de almacenamiento de medios
+#MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+#DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
