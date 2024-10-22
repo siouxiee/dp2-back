@@ -1,27 +1,19 @@
 import requests
 import boto3
 from botocore.exceptions import NoCredentialsError
-
-# Información del bucket S3 y la región
-S3_BUCKET = 's3-dp2-villaizan-redes'
-S3_REGION = 'us-east-1'
-
-# Tus credenciales de AWS (accesos ya proporcionados)
-AWS_ACCESS_KEY = 'ASIAR3IZ5TJHRN766ECK'  # Reemplaza con tu access key
-AWS_SECRET_KEY = 'qJs0wP5RKSA/IVcyqZperXS8p3SmzTfWnpNzS4ZT'  # Reemplaza con tu secret key
-
+from smmproject import settings 
 
 def obtener_url_s3(nombre_archivo):
     # Crear cliente S3 utilizando las credenciales proporcionadas
     s3 = boto3.client('s3', 
-                      region_name=S3_REGION,
-                      aws_access_key_id=AWS_ACCESS_KEY,
-                      aws_secret_access_key=AWS_SECRET_KEY)
+                      region_name=settings.AWS_S3_REGION_NAME,
+                      aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                      aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY)
 
     try:
         # Generar una URL pre-firmada para acceder al archivo en S3
         url = s3.generate_presigned_url('get_object',
-                                        Params={'Bucket': S3_BUCKET, 'Key': nombre_archivo},
+                                        Params={'Bucket': settings.AWS_STORAGE_BUCKET_NAME, 'Key': nombre_archivo},
                                         ExpiresIn=3600)  # URL válida por 1 hora
         return url
     except NoCredentialsError:
