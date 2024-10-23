@@ -78,8 +78,8 @@ class Direccion(models.Model):
     distrito = models.CharField(max_length=100, db_column='distrito')
     codigo_postal = models.CharField(max_length=10, null=True, blank=True, db_column='codigoPostal')
     referencia = models.TextField(null=True, blank=True, db_column='referencia')
-    id_ciudad = models.ForeignKey(Ciudad, on_delete=models.SET_NULL, null=True, db_column='id_ciudad')
-    id_ubicacion = models.ForeignKey(Ubicacion, on_delete=models.SET_NULL, null=True, db_column='id_ubicacion')
+    id_ciudad = models.ForeignKey('Ciudad', on_delete=models.SET_NULL, null=True, db_column='id_ciudad')
+    id_ubicacion = models.ForeignKey('Ubicacion', on_delete=models.SET_NULL, null=True, db_column='id_ubicacion')
     esta_activo = models.BooleanField(default=True, db_column='estaactivo')
     desactivado_en = models.DateTimeField(null=True, blank=True, db_column='desactivadoen')
     creado_en = models.DateTimeField(auto_now_add=True, db_column='creadoen')
@@ -102,7 +102,7 @@ class Usuario(models.Model):
     correo = models.EmailField(unique=True,db_column='correo')
     contrasena = models.CharField(max_length=100,db_column='contrasena')
     fecha_ultimo_login = models.DateTimeField(null=True, blank=True,db_column='fechaultimologin')
-    id_persona = models.ForeignKey(Persona, on_delete=models.CASCADE, db_column='id_persona')
+    id_persona = models.ForeignKey('Persona', on_delete=models.CASCADE, db_column='id_persona')
     id_rol = models.ForeignKey(Rol, on_delete=models.CASCADE, db_column='id_rol')
     estaactivo = models.BooleanField(default=True,db_column='estaactivo')
     desactivadoen = models.DateTimeField(null=True, blank=True,db_column='desactivadoen')
@@ -110,7 +110,7 @@ class Usuario(models.Model):
     actualizado_en = models.DateTimeField(auto_now=True,db_column='actualizadoen')
     usuario_creacion = models.IntegerField(db_column='usuariocreacion')
     usuario_actualizacion = models.IntegerField(db_column='usuarioactualizacion')
-    direccion = models.ForeignKey(Direccion, on_delete=models.SET_NULL, null=True, blank=True, related_name='usuarios',db_column='id')
+    #direccion = models.ForeignKey('Direccion', on_delete=models.SET_NULL, null=True, blank=True, related_name='usuarios',db_column='direccion')
 
     class Meta:
         db_table = 'vi_usuario'
@@ -146,7 +146,7 @@ class Notificacion(models.Model):
     actualizado_en = models.DateTimeField(auto_now=True,db_column='actualizadoEn')
     usuario_creacion = models.IntegerField(db_column='usuarioCreacion')
     usuario_actualizacion = models.IntegerField(db_column='usuarioActualizacion')
-    id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE,db_column='idUsuario')
+    id_usuario = models.ForeignKey('Usuario', on_delete=models.CASCADE,db_column='idUsuario')
 
     class Meta:
         db_table = 'vi_notificacion'
@@ -241,8 +241,8 @@ class Producto(models.Model):
     creado_en = models.DateTimeField(auto_now_add=True, db_column='creadoen')
     actualizado_en = models.DateTimeField(auto_now=True, db_column='actualizadoen')
     desactivado_en = models.DateTimeField(null=True, blank=True, db_column='desactivadoen')
-    id_tipo_producto = models.ForeignKey(TipoProducto, on_delete=models.SET_NULL, null=True, db_column='id_tipoproducto')
-    id_igv = models.ForeignKey(Igv, on_delete=models.SET_NULL, null=True, db_column='id_igv')
+    id_tipo_producto = models.ForeignKey('TipoProducto', on_delete=models.SET_NULL, null=True, db_column='id_tipoproducto')
+    #id_igv = models.ForeignKey(Igv, on_delete=models.SET_NULL, null=True, db_column='id_igv')
     #subcategoria = models.ForeignKey(Subcategoria, on_delete=models.SET_NULL, null=True)
     #fruta = models.ForeignKey(Fruta, on_delete=models.SET_NULL, null=True)
 
@@ -252,14 +252,123 @@ class Producto(models.Model):
     def __str__(self):
         return self.nombre
 
-class ProductoXUsuario(models.Model):
-    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='productos')
-    esta_activo = models.BooleanField(default=True)
-    creado_en = models.DateTimeField(auto_now_add=True)
-    actualizado_en = models.DateTimeField(auto_now=True)
-    usuario_creacion = models.IntegerField()
-    usuario_actualizacion = models.IntegerField()
+class Pedido(models.Model):
+    id = models.CharField(max_length=50, primary_key=True, db_column='id')    
+    estado = models.CharField(max_length=50, db_column='estado')
+    prioridad_entrega = models.CharField(max_length=20, null=True, blank=True, db_column='prioridadentrega')
+    total = models.DecimalField(max_digits=10, decimal_places=2, default=0, db_column='total')
+    puntos_otorgados = models.IntegerField(default=0, db_column='puntosotorgados')
+    motivo_cancelacion = models.TextField(null=True, blank=True, db_column='motivocancelacion')
+    codigo_seguimiento = models.CharField(max_length=100, null=True, blank=True, db_column='codigoseguimiento')
+    monto_efectivo_pagar = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, db_column='montoefectivopagar')
+    id_motorizado = models.CharField(max_length=50, null=True, blank=True, db_column='id_motorizado')  # Will not use ForeignKey
+    id_direccion = models.ForeignKey('Direccion', on_delete=models.CASCADE, db_column='id_direccion', null=True, blank=True)
+    id_usuario = models.ForeignKey('Usuario', on_delete=models.CASCADE, db_column='id_usuario', null=True, blank=True)
+    esta_activo = models.BooleanField(default=True, db_column='estaactivo')
+    desactivado_en = models.DateTimeField(null=True, blank=True, db_column='desactivadoen')
+    creado_en = models.DateTimeField(auto_now_add=True, db_column='creadoen')
+    actualizado_en = models.DateTimeField(auto_now=True, db_column='actualizadoen')
+    usuario_creacion = models.CharField(max_length=50, db_column='usuariocreacion')
+    usuario_actualizacion = models.CharField(max_length=50, db_column='usuarioactualizacion')
+
+    class Meta:
+        db_table = 'vi_pedido'
 
     def __str__(self):
-        return f"Producto {self.producto.nombre} para Usuario {self.usuario.nombre}"
+        return f"Pedido {self.id} - Estado: {self.estado}"
+
+class Venta(models.Model):
+    id = models.CharField(max_length=50, primary_key=True, db_column='id')
+    tipo_comprobante = models.CharField(max_length=10, db_column='tipocomprobante')
+    fecha_venta = models.DateTimeField(db_column='fechaventa')
+    numero_comprobante = models.CharField(max_length=50, db_column='numerocomprobante')
+    monto_total = models.DecimalField(max_digits=10, decimal_places=2, db_column='montototal')
+    total_paletas = models.IntegerField(db_column='totalpaletas')
+    total_mafeletas = models.IntegerField(db_column='totalmafeletas')
+    estado = models.CharField(max_length=50, db_column='estado')
+    total_igv = models.DecimalField(max_digits=10, decimal_places=2, db_column='totaligv')
+    id_pedido = models.ForeignKey('Pedido', on_delete=models.CASCADE, db_column='id_pedido')
+    id_ordenserie = models.CharField(max_length=50, null=True, blank=True, db_column='id_ordenserie')  # Not using ForeignKey directly
+    esta_activo = models.BooleanField(default=True, db_column='estaactivo')
+    desactivado_en = models.DateTimeField(null=True, blank=True, db_column='desactivadoen')
+    creado_en = models.DateTimeField(auto_now_add=True, db_column='creadoen')
+    actualizado_en = models.DateTimeField(auto_now=True, db_column='actualizadoen')
+    usuario_creacion = models.CharField(max_length=50, db_column='usuariocreacion')
+    usuario_actualizacion = models.CharField(max_length=50, db_column='usuarioactualizacion')
+
+    class Meta:
+        db_table = 'vi_venta'
+
+    def __str__(self):
+        return f"Venta {self.id} - Comprobante: {self.numero_comprobante}"
+
+class DetallePedido(models.Model):
+    id = models.CharField(max_length=50, primary_key=True, db_column='id')    
+    cantidad = models.IntegerField(db_column='cantidad')
+    subtotal = models.DecimalField(max_digits=10, decimal_places=2, db_column='subtotal')
+    id_producto = models.CharField(max_length=50, db_column='id_producto')  # Not using ForeignKey directly
+    precio_ecommerce = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, db_column='precioEcommerce')
+    id_pedido = models.ForeignKey('Pedido', on_delete=models.CASCADE, db_column='id_pedido')
+    id_igv = models.CharField(max_length=50, null=True, blank=True, db_column='id_igv')  # Not using ForeignKey directly
+    esta_activo = models.BooleanField(default=True, db_column='estaactivo')
+    desactivado_en = models.DateTimeField(null=True, blank=True, db_column='desactivadoen')
+    creado_en = models.DateTimeField(auto_now_add=True, db_column='creadoen')
+    actualizado_en = models.DateTimeField(auto_now=True, db_column='actualizadoen')
+    usuario_creacion = models.CharField(max_length=50, db_column='usuariocreacion')
+    usuario_actualizacion = models.CharField(max_length=50, db_column='usuarioactualizacion')
+
+    class Meta:
+        db_table = 'vi_detallepedido'
+
+    def __str__(self):
+        return f"Detalle Pedido {self.id} - Cantidad: {self.cantidad}"
+    
+class ProductoFruta(models.Model):
+    id_producto = models.ForeignKey('Producto', on_delete=models.CASCADE, db_column='id_producto')
+    id_fruta = models.ForeignKey('Fruta', on_delete=models.CASCADE, db_column='id_fruta')
+    esta_activo = models.BooleanField(default=True, db_column='estaactivo')
+    desactivado_en = models.DateTimeField(null=True, blank=True, db_column='desactivadoen')
+    creado_en = models.DateTimeField(auto_now_add=True, db_column='creadoen')
+    actualizado_en = models.DateTimeField(auto_now=True, db_column='actualizadoen')
+    usuario_creacion = models.CharField(max_length=50, db_column='usuariocreacion')
+    usuario_actualizacion = models.CharField(max_length=50, db_column='usuarioactualizacion')
+
+    class Meta:
+        db_table = 'vi_producto_fruta'
+
+    def __str__(self):
+        return f"Producto {self.id_producto_id} - Fruta {self.id_fruta_id}"
+
+class TipoProductoSubcategoria(models.Model):
+    id_tipoproducto = models.ForeignKey('TipoProducto', on_delete=models.CASCADE, db_column='id_tipoproducto')
+    id_subcategoria = models.ForeignKey('Subcategoria', on_delete=models.CASCADE, db_column='id_subcategoria')
+    esta_activo = models.BooleanField(default=True, db_column='estaactivo')
+    desactivado_en = models.DateTimeField(null=True, blank=True, db_column='desactivadoen')
+    creado_en = models.DateTimeField(auto_now_add=True, db_column='creadoen')
+    actualizado_en = models.DateTimeField(auto_now=True, db_column='actualizadoen')
+    usuario_creacion = models.CharField(max_length=50, default='admin', db_column='usuariocreacion')
+    usuario_actualizacion = models.CharField(max_length=50, db_column='usuarioactualizacion')
+
+    class Meta:
+        db_table = 'vi_tipoproducto_subcategoria'
+        unique_together = (('id_tipoproducto', 'id_subcategoria'),)
+
+    def __str__(self):
+        return f"TipoProducto {self.id_tipoproducto_id} - Subcategoria {self.id_subcategoria_id}"
+
+class ProductoSubcategoria(models.Model):
+    id_producto = models.ForeignKey('Producto', on_delete=models.CASCADE, db_column='id_producto')
+    id_subcategoria = models.ForeignKey('Subcategoria', on_delete=models.CASCADE, db_column='id_subcategoria')
+    esta_activo = models.BooleanField(default=True, db_column='estaactivo')
+    desactivado_en = models.DateTimeField(null=True, blank=True, db_column='desactivadoen')
+    creado_en = models.DateTimeField(auto_now_add=True, db_column='creadoen')
+    actualizado_en = models.DateTimeField(auto_now=True, db_column='actualizadoen')
+    usuario_creacion = models.CharField(max_length=50, db_column='usuariocreacion')
+    usuario_actualizacion = models.CharField(max_length=50, db_column='usuarioactualizacion')
+
+    class Meta:
+        db_table = 'vi_producto_subcategoria'
+        unique_together = (('id_producto', 'id_subcategoria'),)
+
+    def __str__(self):
+        return f"Producto {self.id_producto_id} - Subcategoria {self.id_subcategoria_id}"

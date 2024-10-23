@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Ciudad, Usuario, Producto, ProductoXUsuario, TipoProducto, Subcategoria
+from .models import Ciudad, Usuario, Producto, TipoProducto, Subcategoria,Persona,Direccion,ProductoFruta,Fruta,Venta,Pedido
 
 class CiudadSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,12 +15,6 @@ class ProductoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Producto
         fields = ['id', 'codigo', 'nombre', 'precio_a']
-
-class ProductoXUsuarioSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProductoXUsuario
-        fields = ['id', 'producto', 'usuario', 'esta_activo']
-
 class TipoProductoSerializer(serializers.ModelSerializer):
     class Meta:
         model = TipoProducto
@@ -30,3 +24,8 @@ class SubcategoriaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subcategoria
         fields = ['id', 'nombre']
+
+class PersonaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Persona
+        fields = '__all__'
