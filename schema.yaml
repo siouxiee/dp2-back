@@ -1,0 +1,3836 @@
+openapi: 3.0.2
+info:
+  title: ''
+  version: ''
+paths:
+  /cuentas/:
+    get:
+      operationId: listobtener_cuentas_red_socials
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+          description: ''
+      tags:
+      - cuentas
+  /posts/programados/:
+    get:
+      operationId: listobtener_posts_programados
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+          description: ''
+      tags:
+      - posts
+  /posts/:
+    get:
+      operationId: listPosts
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+          description: ''
+      tags:
+      - posts
+    post:
+      operationId: createPost
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Post'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Post'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Post'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+          description: ''
+      tags:
+      - posts
+  /posts/{id}/:
+    get:
+      operationId: retrievePost
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this post.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+          description: ''
+      tags:
+      - posts
+    put:
+      operationId: updatePost
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this post.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Post'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Post'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Post'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+          description: ''
+      tags:
+      - posts
+    patch:
+      operationId: partialUpdatePost
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this post.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Post'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Post'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Post'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+          description: ''
+      tags:
+      - posts
+    delete:
+      operationId: destroyPost
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this post.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - posts
+  /personas/:
+    get:
+      operationId: listPersonas
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Persona'
+          description: ''
+      tags:
+      - personas
+    post:
+      operationId: createPersona
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Persona'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Persona'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Persona'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Persona'
+          description: ''
+      tags:
+      - personas
+  /personas/{id}/:
+    get:
+      operationId: retrievePersona
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this persona.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Persona'
+          description: ''
+      tags:
+      - personas
+    put:
+      operationId: updatePersona
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this persona.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Persona'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Persona'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Persona'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Persona'
+          description: ''
+      tags:
+      - personas
+    patch:
+      operationId: partialUpdatePersona
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this persona.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Persona'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Persona'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Persona'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Persona'
+          description: ''
+      tags:
+      - personas
+    delete:
+      operationId: destroyPersona
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this persona.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - personas
+  /roles/:
+    get:
+      operationId: listRols
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Rol'
+          description: ''
+      tags:
+      - roles
+    post:
+      operationId: createRol
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Rol'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Rol'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Rol'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rol'
+          description: ''
+      tags:
+      - roles
+  /roles/{id}/:
+    get:
+      operationId: retrieveRol
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this rol.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rol'
+          description: ''
+      tags:
+      - roles
+    put:
+      operationId: updateRol
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this rol.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Rol'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Rol'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Rol'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rol'
+          description: ''
+      tags:
+      - roles
+    patch:
+      operationId: partialUpdateRol
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this rol.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Rol'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Rol'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Rol'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rol'
+          description: ''
+      tags:
+      - roles
+    delete:
+      operationId: destroyRol
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this rol.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - roles
+  /ciudades/:
+    get:
+      operationId: listCiudads
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ciudad'
+          description: ''
+      tags:
+      - ciudades
+    post:
+      operationId: createCiudad
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ciudad'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Ciudad'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Ciudad'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ciudad'
+          description: ''
+      tags:
+      - ciudades
+  /ciudades/{id}/:
+    get:
+      operationId: retrieveCiudad
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this ciudad.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ciudad'
+          description: ''
+      tags:
+      - ciudades
+    put:
+      operationId: updateCiudad
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this ciudad.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ciudad'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Ciudad'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Ciudad'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ciudad'
+          description: ''
+      tags:
+      - ciudades
+    patch:
+      operationId: partialUpdateCiudad
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this ciudad.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ciudad'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Ciudad'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Ciudad'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ciudad'
+          description: ''
+      tags:
+      - ciudades
+    delete:
+      operationId: destroyCiudad
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this ciudad.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - ciudades
+  /ubicaciones/:
+    get:
+      operationId: listUbicacions
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ubicacion'
+          description: ''
+      tags:
+      - ubicaciones
+    post:
+      operationId: createUbicacion
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ubicacion'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Ubicacion'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Ubicacion'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ubicacion'
+          description: ''
+      tags:
+      - ubicaciones
+  /ubicaciones/{id}/:
+    get:
+      operationId: retrieveUbicacion
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this ubicacion.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ubicacion'
+          description: ''
+      tags:
+      - ubicaciones
+    put:
+      operationId: updateUbicacion
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this ubicacion.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ubicacion'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Ubicacion'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Ubicacion'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ubicacion'
+          description: ''
+      tags:
+      - ubicaciones
+    patch:
+      operationId: partialUpdateUbicacion
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this ubicacion.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ubicacion'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Ubicacion'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Ubicacion'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ubicacion'
+          description: ''
+      tags:
+      - ubicaciones
+    delete:
+      operationId: destroyUbicacion
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this ubicacion.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - ubicaciones
+  /direcciones/:
+    get:
+      operationId: listDireccions
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Direccion'
+          description: ''
+      tags:
+      - direcciones
+    post:
+      operationId: createDireccion
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Direccion'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Direccion'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Direccion'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Direccion'
+          description: ''
+      tags:
+      - direcciones
+  /direcciones/{id}/:
+    get:
+      operationId: retrieveDireccion
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this direccion.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Direccion'
+          description: ''
+      tags:
+      - direcciones
+    put:
+      operationId: updateDireccion
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this direccion.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Direccion'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Direccion'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Direccion'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Direccion'
+          description: ''
+      tags:
+      - direcciones
+    patch:
+      operationId: partialUpdateDireccion
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this direccion.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Direccion'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Direccion'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Direccion'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Direccion'
+          description: ''
+      tags:
+      - direcciones
+    delete:
+      operationId: destroyDireccion
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this direccion.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - direcciones
+  /usuarios/:
+    get:
+      operationId: listUsuarios
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Usuario'
+          description: ''
+      tags:
+      - usuarios
+    post:
+      operationId: createUsuario
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+          description: ''
+      tags:
+      - usuarios
+  /usuarios/{id}/:
+    get:
+      operationId: retrieveUsuario
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this usuario.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+          description: ''
+      tags:
+      - usuarios
+    put:
+      operationId: updateUsuario
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this usuario.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+          description: ''
+      tags:
+      - usuarios
+    patch:
+      operationId: partialUpdateUsuario
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this usuario.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+          description: ''
+      tags:
+      - usuarios
+    delete:
+      operationId: destroyUsuario
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this usuario.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - usuarios
+  /permisos/:
+    get:
+      operationId: listPermisos
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Permiso'
+          description: ''
+      tags:
+      - permisos
+    post:
+      operationId: createPermiso
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Permiso'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Permiso'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Permiso'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Permiso'
+          description: ''
+      tags:
+      - permisos
+  /permisos/{id}/:
+    get:
+      operationId: retrievePermiso
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this permiso.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Permiso'
+          description: ''
+      tags:
+      - permisos
+    put:
+      operationId: updatePermiso
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this permiso.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Permiso'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Permiso'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Permiso'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Permiso'
+          description: ''
+      tags:
+      - permisos
+    patch:
+      operationId: partialUpdatePermiso
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this permiso.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Permiso'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Permiso'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Permiso'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Permiso'
+          description: ''
+      tags:
+      - permisos
+    delete:
+      operationId: destroyPermiso
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this permiso.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - permisos
+  /notificaciones/:
+    get:
+      operationId: listNotificacions
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notificacion'
+          description: ''
+      tags:
+      - notificaciones
+    post:
+      operationId: createNotificacion
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notificacion'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Notificacion'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Notificacion'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notificacion'
+          description: ''
+      tags:
+      - notificaciones
+  /notificaciones/{id}/:
+    get:
+      operationId: retrieveNotificacion
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this notificacion.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notificacion'
+          description: ''
+      tags:
+      - notificaciones
+    put:
+      operationId: updateNotificacion
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this notificacion.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notificacion'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Notificacion'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Notificacion'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notificacion'
+          description: ''
+      tags:
+      - notificaciones
+    patch:
+      operationId: partialUpdateNotificacion
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this notificacion.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notificacion'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Notificacion'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Notificacion'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notificacion'
+          description: ''
+      tags:
+      - notificaciones
+    delete:
+      operationId: destroyNotificacion
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this notificacion.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - notificaciones
+  /tipo-productos/:
+    get:
+      operationId: listTipoProductos
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TipoProducto'
+          description: ''
+      tags:
+      - tipo-productos
+    post:
+      operationId: createTipoProducto
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TipoProducto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TipoProducto'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TipoProducto'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TipoProducto'
+          description: ''
+      tags:
+      - tipo-productos
+  /tipo-productos/{id}/:
+    get:
+      operationId: retrieveTipoProducto
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this tipo producto.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TipoProducto'
+          description: ''
+      tags:
+      - tipo-productos
+    put:
+      operationId: updateTipoProducto
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this tipo producto.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TipoProducto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TipoProducto'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TipoProducto'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TipoProducto'
+          description: ''
+      tags:
+      - tipo-productos
+    patch:
+      operationId: partialUpdateTipoProducto
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this tipo producto.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TipoProducto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TipoProducto'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TipoProducto'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TipoProducto'
+          description: ''
+      tags:
+      - tipo-productos
+    delete:
+      operationId: destroyTipoProducto
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this tipo producto.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - tipo-productos
+  /subcategorias/:
+    get:
+      operationId: listSubcategoria
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subcategoria'
+          description: ''
+      tags:
+      - subcategorias
+    post:
+      operationId: createSubcategoria
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subcategoria'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Subcategoria'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Subcategoria'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subcategoria'
+          description: ''
+      tags:
+      - subcategorias
+  /subcategorias/{id}/:
+    get:
+      operationId: retrieveSubcategoria
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this subcategoria.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subcategoria'
+          description: ''
+      tags:
+      - subcategorias
+    put:
+      operationId: updateSubcategoria
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this subcategoria.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subcategoria'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Subcategoria'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Subcategoria'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subcategoria'
+          description: ''
+      tags:
+      - subcategorias
+    patch:
+      operationId: partialUpdateSubcategoria
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this subcategoria.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subcategoria'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Subcategoria'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Subcategoria'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subcategoria'
+          description: ''
+      tags:
+      - subcategorias
+    delete:
+      operationId: destroySubcategoria
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this subcategoria.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - subcategorias
+  /frutas/:
+    get:
+      operationId: listFruta
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Fruta'
+          description: ''
+      tags:
+      - frutas
+    post:
+      operationId: createFruta
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Fruta'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Fruta'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Fruta'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fruta'
+          description: ''
+      tags:
+      - frutas
+  /frutas/{id}/:
+    get:
+      operationId: retrieveFruta
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this fruta.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fruta'
+          description: ''
+      tags:
+      - frutas
+    put:
+      operationId: updateFruta
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this fruta.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Fruta'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Fruta'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Fruta'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fruta'
+          description: ''
+      tags:
+      - frutas
+    patch:
+      operationId: partialUpdateFruta
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this fruta.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Fruta'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Fruta'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Fruta'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fruta'
+          description: ''
+      tags:
+      - frutas
+    delete:
+      operationId: destroyFruta
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this fruta.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - frutas
+  /igvs/:
+    get:
+      operationId: listIgvs
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Igv'
+          description: ''
+      tags:
+      - igvs
+    post:
+      operationId: createIgv
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Igv'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Igv'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Igv'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Igv'
+          description: ''
+      tags:
+      - igvs
+  /igvs/{id}/:
+    get:
+      operationId: retrieveIgv
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this igv.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Igv'
+          description: ''
+      tags:
+      - igvs
+    put:
+      operationId: updateIgv
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this igv.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Igv'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Igv'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Igv'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Igv'
+          description: ''
+      tags:
+      - igvs
+    patch:
+      operationId: partialUpdateIgv
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this igv.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Igv'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Igv'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Igv'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Igv'
+          description: ''
+      tags:
+      - igvs
+    delete:
+      operationId: destroyIgv
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this igv.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - igvs
+  /productos/:
+    get:
+      operationId: listProductos
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Producto'
+          description: ''
+      tags:
+      - productos
+    post:
+      operationId: createProducto
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Producto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Producto'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Producto'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Producto'
+          description: ''
+      tags:
+      - productos
+  /productos/{id}/:
+    get:
+      operationId: retrieveProducto
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this producto.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Producto'
+          description: ''
+      tags:
+      - productos
+    put:
+      operationId: updateProducto
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this producto.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Producto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Producto'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Producto'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Producto'
+          description: ''
+      tags:
+      - productos
+    patch:
+      operationId: partialUpdateProducto
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this producto.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Producto'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Producto'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Producto'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Producto'
+          description: ''
+      tags:
+      - productos
+    delete:
+      operationId: destroyProducto
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this producto.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - productos
+  /pedidos/:
+    get:
+      operationId: listPedidos
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pedido'
+          description: ''
+      tags:
+      - pedidos
+    post:
+      operationId: createPedido
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pedido'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Pedido'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Pedido'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pedido'
+          description: ''
+      tags:
+      - pedidos
+  /pedidos/{id}/:
+    get:
+      operationId: retrievePedido
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this pedido.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pedido'
+          description: ''
+      tags:
+      - pedidos
+    put:
+      operationId: updatePedido
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this pedido.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pedido'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Pedido'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Pedido'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pedido'
+          description: ''
+      tags:
+      - pedidos
+    patch:
+      operationId: partialUpdatePedido
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this pedido.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pedido'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Pedido'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Pedido'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pedido'
+          description: ''
+      tags:
+      - pedidos
+    delete:
+      operationId: destroyPedido
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this pedido.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - pedidos
+  /ventas/:
+    get:
+      operationId: listVenta
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Venta'
+          description: ''
+      tags:
+      - ventas
+    post:
+      operationId: createVenta
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Venta'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Venta'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Venta'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Venta'
+          description: ''
+      tags:
+      - ventas
+  /ventas/{id}/:
+    get:
+      operationId: retrieveVenta
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this venta.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Venta'
+          description: ''
+      tags:
+      - ventas
+    put:
+      operationId: updateVenta
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this venta.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Venta'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Venta'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Venta'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Venta'
+          description: ''
+      tags:
+      - ventas
+    patch:
+      operationId: partialUpdateVenta
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this venta.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Venta'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Venta'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Venta'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Venta'
+          description: ''
+      tags:
+      - ventas
+    delete:
+      operationId: destroyVenta
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this venta.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - ventas
+  /detalles-pedido/:
+    get:
+      operationId: listDetallePedidos
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DetallePedido'
+          description: ''
+      tags:
+      - detalles-pedido
+    post:
+      operationId: createDetallePedido
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DetallePedido'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DetallePedido'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DetallePedido'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetallePedido'
+          description: ''
+      tags:
+      - detalles-pedido
+  /detalles-pedido/{id}/:
+    get:
+      operationId: retrieveDetallePedido
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this detalle pedido.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetallePedido'
+          description: ''
+      tags:
+      - detalles-pedido
+    put:
+      operationId: updateDetallePedido
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this detalle pedido.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DetallePedido'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DetallePedido'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DetallePedido'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetallePedido'
+          description: ''
+      tags:
+      - detalles-pedido
+    patch:
+      operationId: partialUpdateDetallePedido
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this detalle pedido.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DetallePedido'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DetallePedido'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DetallePedido'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetallePedido'
+          description: ''
+      tags:
+      - detalles-pedido
+    delete:
+      operationId: destroyDetallePedido
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this detalle pedido.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - detalles-pedido
+  /producto-frutas/:
+    get:
+      operationId: listProductoFruta
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductoFruta'
+          description: ''
+      tags:
+      - producto-frutas
+    post:
+      operationId: createProductoFruta
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductoFruta'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductoFruta'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductoFruta'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductoFruta'
+          description: ''
+      tags:
+      - producto-frutas
+  /producto-frutas/{id}/:
+    get:
+      operationId: retrieveProductoFruta
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this producto fruta.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductoFruta'
+          description: ''
+      tags:
+      - producto-frutas
+    put:
+      operationId: updateProductoFruta
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this producto fruta.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductoFruta'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductoFruta'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductoFruta'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductoFruta'
+          description: ''
+      tags:
+      - producto-frutas
+    patch:
+      operationId: partialUpdateProductoFruta
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this producto fruta.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductoFruta'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductoFruta'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductoFruta'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductoFruta'
+          description: ''
+      tags:
+      - producto-frutas
+    delete:
+      operationId: destroyProductoFruta
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this producto fruta.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - producto-frutas
+  /tipo-producto-subcategorias/:
+    get:
+      operationId: listTipoProductoSubcategoria
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TipoProductoSubcategoria'
+          description: ''
+      tags:
+      - tipo-producto-subcategorias
+    post:
+      operationId: createTipoProductoSubcategoria
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TipoProductoSubcategoria'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TipoProductoSubcategoria'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TipoProductoSubcategoria'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TipoProductoSubcategoria'
+          description: ''
+      tags:
+      - tipo-producto-subcategorias
+  /tipo-producto-subcategorias/{id}/:
+    get:
+      operationId: retrieveTipoProductoSubcategoria
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this tipo producto subcategoria.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TipoProductoSubcategoria'
+          description: ''
+      tags:
+      - tipo-producto-subcategorias
+    put:
+      operationId: updateTipoProductoSubcategoria
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this tipo producto subcategoria.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TipoProductoSubcategoria'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TipoProductoSubcategoria'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TipoProductoSubcategoria'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TipoProductoSubcategoria'
+          description: ''
+      tags:
+      - tipo-producto-subcategorias
+    patch:
+      operationId: partialUpdateTipoProductoSubcategoria
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this tipo producto subcategoria.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TipoProductoSubcategoria'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TipoProductoSubcategoria'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TipoProductoSubcategoria'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TipoProductoSubcategoria'
+          description: ''
+      tags:
+      - tipo-producto-subcategorias
+    delete:
+      operationId: destroyTipoProductoSubcategoria
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this tipo producto subcategoria.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - tipo-producto-subcategorias
+  /producto-subcategorias/:
+    get:
+      operationId: listProductoSubcategoria
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductoSubcategoria'
+          description: ''
+      tags:
+      - producto-subcategorias
+    post:
+      operationId: createProductoSubcategoria
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductoSubcategoria'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductoSubcategoria'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductoSubcategoria'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductoSubcategoria'
+          description: ''
+      tags:
+      - producto-subcategorias
+  /producto-subcategorias/{id}/:
+    get:
+      operationId: retrieveProductoSubcategoria
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this producto subcategoria.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductoSubcategoria'
+          description: ''
+      tags:
+      - producto-subcategorias
+    put:
+      operationId: updateProductoSubcategoria
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this producto subcategoria.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductoSubcategoria'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductoSubcategoria'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductoSubcategoria'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductoSubcategoria'
+          description: ''
+      tags:
+      - producto-subcategorias
+    patch:
+      operationId: partialUpdateProductoSubcategoria
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this producto subcategoria.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductoSubcategoria'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductoSubcategoria'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductoSubcategoria'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductoSubcategoria'
+          description: ''
+      tags:
+      - producto-subcategorias
+    delete:
+      operationId: destroyProductoSubcategoria
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this producto subcategoria.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - producto-subcategorias
+  /cuentas/crear/:
+    post:
+      operationId: createcrear_cuenta_red_social
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+          application/x-www-form-urlencoded:
+            schema: {}
+          multipart/form-data:
+            schema: {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - cuentas
+  /posts/crear/:
+    post:
+      operationId: createcrear_post
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+          application/x-www-form-urlencoded:
+            schema: {}
+          multipart/form-data:
+            schema: {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - posts
+  /videos/upload/:
+    post:
+      operationId: createUploadVideoToS3
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema: {}
+          application/x-www-form-urlencoded:
+            schema: {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - videos
+  /videos/publicar/:
+    post:
+      operationId: createpublicar_video
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+          application/x-www-form-urlencoded:
+            schema: {}
+          multipart/form-data:
+            schema: {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - videos
+  /cuentas/eliminar/{id}/:
+    delete:
+      operationId: destroyeliminar_token
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - cuentas
+components:
+  schemas:
+    Post:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        contenido:
+          type: string
+        link:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 200
+          pattern: "^(?:[a-z0-9.+-]*)://(?:[^\\s:@/]+(?::[^\\s:@/]*)?@)?(?:(?:0|25[0-5]|2[0-4][0-9]|1[0-9]?[0-9]?|[1-9][0-9]?)(?:\\\
+            .(?:0|25[0-5]|2[0-4][0-9]|1[0-9]?[0-9]?|[1-9][0-9]?)){3}|\\[[0-9a-f:.]+\\\
+            ]|([a-z\xA1-\uFFFF0-9](?:[a-z\xA1-\uFFFF0-9-]{0,61}[a-z\xA1-\uFFFF0-9])?(?:\\\
+            .(?!-)[a-z\xA1-\uFFFF0-9-]{1,63}(?<!-))*\\.(?!-)(?:[a-z\xA1-\uFFFF-]{2,63}|xn--[a-z0-9]{1,59})(?<!-)\\\
+            .?|localhost))(?::[0-9]{1,5})?(?:[/?#][^\\s]*)?\\z"
+        preview:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 200
+          pattern: "^(?:[a-z0-9.+-]*)://(?:[^\\s:@/]+(?::[^\\s:@/]*)?@)?(?:(?:0|25[0-5]|2[0-4][0-9]|1[0-9]?[0-9]?|[1-9][0-9]?)(?:\\\
+            .(?:0|25[0-5]|2[0-4][0-9]|1[0-9]?[0-9]?|[1-9][0-9]?)){3}|\\[[0-9a-f:.]+\\\
+            ]|([a-z\xA1-\uFFFF0-9](?:[a-z\xA1-\uFFFF0-9-]{0,61}[a-z\xA1-\uFFFF0-9])?(?:\\\
+            .(?!-)[a-z\xA1-\uFFFF0-9-]{1,63}(?<!-))*\\.(?!-)(?:[a-z\xA1-\uFFFF-]{2,63}|xn--[a-z0-9]{1,59})(?<!-)\\\
+            .?|localhost))(?::[0-9]{1,5})?(?:[/?#][^\\s]*)?\\z"
+        media:
+          type: string
+          format: binary
+          nullable: true
+        fecha_publicacion:
+          type: string
+          format: date
+          nullable: true
+        is_programmed:
+          type: boolean
+        programmed_post_time:
+          type: string
+          format: date-time
+          nullable: true
+        estado:
+          enum:
+          - P
+          - Pu
+          - F
+          - B
+          type: string
+        red_social:
+          enum:
+          - TikTok
+          - Facebook
+          - Instagram
+          type: string
+        tipo:
+          type: string
+          nullable: true
+          maxLength: 255
+        id_red_social:
+          type: string
+          nullable: true
+          maxLength: 255
+        cuenta:
+          type: integer
+      required:
+      - contenido
+      - estado
+      - cuenta
+    Persona:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 50
+        tipo_documento:
+          type: string
+          nullable: true
+          maxLength: 5
+        numero_documento:
+          type: string
+          nullable: true
+          maxLength: 20
+        razon_eliminacion:
+          type: string
+          nullable: true
+          maxLength: 255
+        estado:
+          type: string
+          maxLength: 50
+        esta_activo:
+          type: boolean
+        desactivado_en:
+          type: string
+          format: date-time
+          nullable: true
+        creado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        actualizado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        usuario_creacion:
+          type: string
+          maxLength: 50
+        usuario_actualizacion:
+          type: string
+          maxLength: 50
+      required:
+      - id
+      - estado
+      - usuario_creacion
+      - usuario_actualizacion
+    Rol:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 50
+        nombre:
+          type: string
+          maxLength: 50
+        esta_activo:
+          type: boolean
+        eliminado_en:
+          type: string
+          format: date-time
+          nullable: true
+        creado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        actualizado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        usuario_creacion:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        usuario_actualizacion:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+      required:
+      - id
+      - nombre
+      - usuario_creacion
+      - usuario_actualizacion
+    Ciudad:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 50
+        nombre:
+          type: string
+          maxLength: 100
+        region:
+          type: string
+          maxLength: 100
+        esta_activo:
+          type: boolean
+        desactivado_en:
+          type: string
+          format: date-time
+          nullable: true
+        creado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        actualizado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        usuario_creacion:
+          type: string
+          maxLength: 50
+        usuario_actualizacion:
+          type: string
+          nullable: true
+          maxLength: 50
+      required:
+      - id
+      - nombre
+      - region
+      - usuario_creacion
+    Ubicacion:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 50
+        latitud:
+          type: string
+          format: decimal
+          multipleOf: 1.0e-06
+          maximum: 1000
+          minimum: -1000
+        longitud:
+          type: string
+          format: decimal
+          multipleOf: 1.0e-06
+          maximum: 1000
+          minimum: -1000
+        esta_activo:
+          type: boolean
+        desactivado_en:
+          type: string
+          format: date-time
+          nullable: true
+        creado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        actualizado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        usuario_creacion:
+          type: string
+          maxLength: 50
+        usuario_actualizacion:
+          type: string
+          nullable: true
+          maxLength: 50
+      required:
+      - id
+      - latitud
+      - longitud
+      - usuario_creacion
+    Direccion:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 50
+        calle:
+          type: string
+          maxLength: 255
+        numero_exterior:
+          type: string
+          maxLength: 20
+        numero_interior:
+          type: string
+          nullable: true
+          maxLength: 20
+        distrito:
+          type: string
+          maxLength: 100
+        codigo_postal:
+          type: string
+          nullable: true
+          maxLength: 10
+        referencia:
+          type: string
+          nullable: true
+        esta_activo:
+          type: boolean
+        desactivado_en:
+          type: string
+          format: date-time
+          nullable: true
+        creado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        actualizado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        usuario_creacion:
+          type: string
+          maxLength: 50
+        usuario_actualizacion:
+          type: string
+          nullable: true
+          maxLength: 50
+        id_ciudad:
+          type: string
+          nullable: true
+        id_ubicacion:
+          type: string
+          nullable: true
+      required:
+      - id
+      - calle
+      - numero_exterior
+      - distrito
+      - usuario_creacion
+    Usuario:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 50
+        nombre:
+          type: string
+          maxLength: 100
+        apellido:
+          type: string
+          maxLength: 100
+        con_cuenta:
+          type: boolean
+        numero_telefono:
+          type: string
+          nullable: true
+          maxLength: 15
+        correo:
+          type: string
+          format: email
+          maxLength: 254
+        contrasena:
+          type: string
+          maxLength: 100
+        fecha_ultimo_login:
+          type: string
+          format: date-time
+          nullable: true
+        estaactivo:
+          type: boolean
+        desactivadoen:
+          type: string
+          format: date-time
+          nullable: true
+        creado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        actualizado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        usuario_creacion:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        usuario_actualizacion:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        id_persona:
+          type: string
+        id_rol:
+          type: string
+      required:
+      - id
+      - nombre
+      - apellido
+      - correo
+      - contrasena
+      - usuario_creacion
+      - usuario_actualizacion
+      - id_persona
+      - id_rol
+    Permiso:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 50
+        nombre:
+          type: string
+          maxLength: 50
+        esta_activo:
+          type: boolean
+        eliminado_en:
+          type: string
+          format: date-time
+          nullable: true
+        creado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        actualizado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        usuario_creacion:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        usuario_actualizacion:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+      required:
+      - id
+      - nombre
+      - usuario_creacion
+      - usuario_actualizacion
+    Notificacion:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 50
+        asunto:
+          type: string
+          maxLength: 50
+        descripcion:
+          type: string
+        tipo_notificacion:
+          type: string
+          maxLength: 50
+        leido:
+          type: boolean
+        esta_activo:
+          type: boolean
+        eliminado_en:
+          type: string
+          format: date-time
+          nullable: true
+        creado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        actualizado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        usuario_creacion:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        usuario_actualizacion:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        id_usuario:
+          type: string
+      required:
+      - id
+      - asunto
+      - descripcion
+      - tipo_notificacion
+      - usuario_creacion
+      - usuario_actualizacion
+      - id_usuario
+    TipoProducto:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 50
+        nombre:
+          type: string
+          maxLength: 255
+        esta_activo:
+          type: boolean
+        eliminado_en:
+          type: string
+          format: date-time
+          nullable: true
+        creado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        actualizado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        usuario_creacion:
+          type: string
+          maxLength: 50
+        usuario_actualizacion:
+          type: string
+          nullable: true
+          maxLength: 50
+      required:
+      - id
+      - nombre
+      - usuario_creacion
+    Subcategoria:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 50
+        nombre:
+          type: string
+          maxLength: 255
+        esta_activo:
+          type: boolean
+        eliminado_en:
+          type: string
+          format: date-time
+          nullable: true
+        creado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        actualizado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        usuario_creacion:
+          type: string
+          maxLength: 50
+        usuario_actualizacion:
+          type: string
+          nullable: true
+          maxLength: 50
+      required:
+      - id
+      - nombre
+      - usuario_creacion
+    Fruta:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 50
+        nombre:
+          type: string
+          maxLength: 255
+        url_imagen:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 200
+          pattern: "^(?:[a-z0-9.+-]*)://(?:[^\\s:@/]+(?::[^\\s:@/]*)?@)?(?:(?:0|25[0-5]|2[0-4][0-9]|1[0-9]?[0-9]?|[1-9][0-9]?)(?:\\\
+            .(?:0|25[0-5]|2[0-4][0-9]|1[0-9]?[0-9]?|[1-9][0-9]?)){3}|\\[[0-9a-f:.]+\\\
+            ]|([a-z\xA1-\uFFFF0-9](?:[a-z\xA1-\uFFFF0-9-]{0,61}[a-z\xA1-\uFFFF0-9])?(?:\\\
+            .(?!-)[a-z\xA1-\uFFFF0-9-]{1,63}(?<!-))*\\.(?!-)(?:[a-z\xA1-\uFFFF-]{2,63}|xn--[a-z0-9]{1,59})(?<!-)\\\
+            .?|localhost))(?::[0-9]{1,5})?(?:[/?#][^\\s]*)?\\z"
+        descripcion:
+          type: string
+          nullable: true
+        esta_activo:
+          type: boolean
+        informacion_educativa:
+          type: string
+          nullable: true
+        eliminado_en:
+          type: string
+          format: date-time
+          nullable: true
+        creado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        actualizado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        usuario_creacion:
+          type: string
+          maxLength: 50
+        usuario_actualizacion:
+          type: string
+          nullable: true
+          maxLength: 50
+      required:
+      - id
+      - nombre
+      - usuario_creacion
+    Igv:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 50
+        porcentaje:
+          type: string
+          format: decimal
+          multipleOf: 0.01
+          maximum: 1000
+          minimum: -1000
+        esta_activo:
+          type: boolean
+        desactivado_en:
+          type: string
+          format: date-time
+          nullable: true
+        creado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        actualizado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        usuario_creacion:
+          type: string
+          maxLength: 50
+        usuario_actualizacion:
+          type: string
+          nullable: true
+          maxLength: 50
+      required:
+      - id
+      - porcentaje
+      - usuario_creacion
+    Producto:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 50
+        codigo:
+          type: string
+          maxLength: 255
+        nombre:
+          type: string
+          maxLength: 255
+        precio_a:
+          type: string
+          format: decimal
+          multipleOf: 0.01
+          maximum: 100000000
+          minimum: -100000000
+        precio_b:
+          type: string
+          format: decimal
+          multipleOf: 0.01
+          maximum: 100000000
+          minimum: -100000000
+          nullable: true
+        precio_c:
+          type: string
+          format: decimal
+          multipleOf: 0.01
+          maximum: 100000000
+          minimum: -100000000
+          nullable: true
+        precio_ecommerce:
+          type: string
+          format: decimal
+          multipleOf: 0.01
+          maximum: 100000000
+          minimum: -100000000
+        url_imagen:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 200
+          pattern: "^(?:[a-z0-9.+-]*)://(?:[^\\s:@/]+(?::[^\\s:@/]*)?@)?(?:(?:0|25[0-5]|2[0-4][0-9]|1[0-9]?[0-9]?|[1-9][0-9]?)(?:\\\
+            .(?:0|25[0-5]|2[0-4][0-9]|1[0-9]?[0-9]?|[1-9][0-9]?)){3}|\\[[0-9a-f:.]+\\\
+            ]|([a-z\xA1-\uFFFF0-9](?:[a-z\xA1-\uFFFF0-9-]{0,61}[a-z\xA1-\uFFFF0-9])?(?:\\\
+            .(?!-)[a-z\xA1-\uFFFF0-9-]{1,63}(?<!-))*\\.(?!-)(?:[a-z\xA1-\uFFFF-]{2,63}|xn--[a-z0-9]{1,59})(?<!-)\\\
+            .?|localhost))(?::[0-9]{1,5})?(?:[/?#][^\\s]*)?\\z"
+        descripcion:
+          type: string
+          nullable: true
+        informacion_nutricional:
+          type: string
+          nullable: true
+        razon_eliminacion:
+          type: string
+          nullable: true
+        estado:
+          type: boolean
+        se_vende_ecommerce:
+          type: boolean
+        esta_activo:
+          type: boolean
+        usuario_creacion:
+          type: string
+          maxLength: 50
+        usuario_actualizacion:
+          type: string
+          nullable: true
+          maxLength: 50
+        creado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        actualizado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        desactivado_en:
+          type: string
+          format: date-time
+          nullable: true
+        id_tipo_producto:
+          type: string
+          nullable: true
+      required:
+      - id
+      - codigo
+      - nombre
+      - precio_a
+      - precio_ecommerce
+      - usuario_creacion
+    Pedido:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 50
+        estado:
+          type: string
+          maxLength: 50
+        prioridad_entrega:
+          type: string
+          nullable: true
+          maxLength: 20
+        total:
+          type: string
+          format: decimal
+          multipleOf: 0.01
+          maximum: 100000000
+          minimum: -100000000
+        puntos_otorgados:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        motivo_cancelacion:
+          type: string
+          nullable: true
+        codigo_seguimiento:
+          type: string
+          nullable: true
+          maxLength: 100
+        monto_efectivo_pagar:
+          type: string
+          format: decimal
+          multipleOf: 0.01
+          maximum: 100000000
+          minimum: -100000000
+          nullable: true
+        id_motorizado:
+          type: string
+          nullable: true
+          maxLength: 50
+        esta_activo:
+          type: boolean
+        desactivado_en:
+          type: string
+          format: date-time
+          nullable: true
+        creado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        actualizado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        usuario_creacion:
+          type: string
+          maxLength: 50
+        usuario_actualizacion:
+          type: string
+          maxLength: 50
+        id_direccion:
+          type: string
+          nullable: true
+        id_usuario:
+          type: string
+          nullable: true
+      required:
+      - id
+      - estado
+      - usuario_creacion
+      - usuario_actualizacion
+    Venta:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 50
+        tipo_comprobante:
+          type: string
+          maxLength: 10
+        fecha_venta:
+          type: string
+          format: date-time
+        numero_comprobante:
+          type: string
+          maxLength: 50
+        monto_total:
+          type: string
+          format: decimal
+          multipleOf: 0.01
+          maximum: 100000000
+          minimum: -100000000
+        total_paletas:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        total_mafeletas:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        estado:
+          type: string
+          maxLength: 50
+        total_igv:
+          type: string
+          format: decimal
+          multipleOf: 0.01
+          maximum: 100000000
+          minimum: -100000000
+        id_ordenserie:
+          type: string
+          nullable: true
+          maxLength: 50
+        esta_activo:
+          type: boolean
+        desactivado_en:
+          type: string
+          format: date-time
+          nullable: true
+        creado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        actualizado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        usuario_creacion:
+          type: string
+          maxLength: 50
+        usuario_actualizacion:
+          type: string
+          maxLength: 50
+        id_pedido:
+          type: string
+      required:
+      - id
+      - tipo_comprobante
+      - fecha_venta
+      - numero_comprobante
+      - monto_total
+      - total_paletas
+      - total_mafeletas
+      - estado
+      - total_igv
+      - usuario_creacion
+      - usuario_actualizacion
+      - id_pedido
+    DetallePedido:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 50
+        cantidad:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        subtotal:
+          type: string
+          format: decimal
+          multipleOf: 0.01
+          maximum: 100000000
+          minimum: -100000000
+        id_producto:
+          type: string
+          maxLength: 50
+        precio_ecommerce:
+          type: string
+          format: decimal
+          multipleOf: 0.01
+          maximum: 100000000
+          minimum: -100000000
+          nullable: true
+        id_igv:
+          type: string
+          nullable: true
+          maxLength: 50
+        esta_activo:
+          type: boolean
+        desactivado_en:
+          type: string
+          format: date-time
+          nullable: true
+        creado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        actualizado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        usuario_creacion:
+          type: string
+          maxLength: 50
+        usuario_actualizacion:
+          type: string
+          maxLength: 50
+        id_pedido:
+          type: string
+      required:
+      - id
+      - cantidad
+      - subtotal
+      - id_producto
+      - usuario_creacion
+      - usuario_actualizacion
+      - id_pedido
+    ProductoFruta:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        esta_activo:
+          type: boolean
+        desactivado_en:
+          type: string
+          format: date-time
+          nullable: true
+        creado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        actualizado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        usuario_creacion:
+          type: string
+          maxLength: 50
+        usuario_actualizacion:
+          type: string
+          maxLength: 50
+        id_producto:
+          type: string
+        id_fruta:
+          type: string
+      required:
+      - usuario_creacion
+      - usuario_actualizacion
+      - id_producto
+      - id_fruta
+    TipoProductoSubcategoria:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        esta_activo:
+          type: boolean
+        desactivado_en:
+          type: string
+          format: date-time
+          nullable: true
+        creado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        actualizado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        usuario_creacion:
+          type: string
+          maxLength: 50
+        usuario_actualizacion:
+          type: string
+          maxLength: 50
+        id_tipoproducto:
+          type: string
+        id_subcategoria:
+          type: string
+      required:
+      - usuario_actualizacion
+      - id_tipoproducto
+      - id_subcategoria
+    ProductoSubcategoria:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        esta_activo:
+          type: boolean
+        desactivado_en:
+          type: string
+          format: date-time
+          nullable: true
+        creado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        actualizado_en:
+          type: string
+          format: date-time
+          readOnly: true
+        usuario_creacion:
+          type: string
+          maxLength: 50
+        usuario_actualizacion:
+          type: string
+          maxLength: 50
+        id_producto:
+          type: string
+        id_subcategoria:
+          type: string
+      required:
+      - usuario_creacion
+      - usuario_actualizacion
+      - id_producto
+      - id_subcategoria

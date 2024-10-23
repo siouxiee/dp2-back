@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'social_management',
     'rest_framework',
     'corsheaders',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
