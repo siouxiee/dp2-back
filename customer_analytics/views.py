@@ -15,6 +15,56 @@ from .serializers import (
     VentaSerializer, DetallePedidoSerializer, ProductoFrutaSerializer, 
     TipoProductoSubcategoriaSerializer, ProductoSubcategoriaSerializer
 )
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from django.db.models import Sum, F
+
+@api_view(['GET'])
+def ventas_por_producto(request, id_producto=None):
+    if id_producto:
+        # Filtrar por el id del producto si se proporciona
+        ventas_producto = (
+            DetallePedido.objects
+            .filter(id_producto=id_producto)
+            .values('id_producto')
+            .annotate(total_ventas=Sum('subtotal'))
+        )
+        if not ventas_producto:
+            return Response({"message": "No se encontraron ventas para el producto especificado."}, status=404)
+    else:
+        # Obtener las ventas para todos los productos
+        ventas_producto = (
+            DetallePedido.objects
+            .values('id_producto')
+            .annotate(total_ventas=Sum('subtotal'))
+            .order_by('-total_ventas')
+        )
+    
+    return Response(ventas_producto)
+
+@api_view(['GET'])
+def ventas_totales(request, id_producto=None):
+    if id_producto:
+        # Filtrar por el id del producto si se proporciona
+        ventas_producto = (
+            DetallePedido.objects
+            .filter(id_producto=id_producto)
+            .values('id_producto')
+            .annotate(total_ventas=Sum('subtotal'))
+        )
+        if not ventas_producto:
+            return Response({"message": "No se encontraron ventas para el producto especificado."}, status=404)
+    else:
+        # Obtener las ventas para todos los productos
+        ventas_producto = (
+            DetallePedido.objects
+            .values('id_producto')
+            .annotate(total_ventas=Sum('subtotal'))
+            .order_by('-total_ventas')
+        )
+    
+    return Response(ventas_producto)
+
 
 class PersonaViewSet(viewsets.ModelViewSet):
     queryset = Persona.objects.all()
