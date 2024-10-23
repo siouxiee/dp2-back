@@ -9,12 +9,7 @@ from .services import publicar_video_tiktok
 import boto3
 from botocore.exceptions import NoCredentialsError
 from rest_framework import viewsets
-
-# Tus credenciales de AWS
-AWS_ACCESS_KEY = 'ASIAR3IZ5TJHRN766ECK'  # Reemplaza con tu access key
-AWS_SECRET_KEY = 'qJs0wP5RKSA/IVcyqZperXS8p3SmzTfWnpNzS4ZT'  # Reemplaza con tu secret key
-S3_BUCKET = 's3-dp2-villaizan-redes'
-S3_REGION = 'us-east-1'
+from smmproject import settings
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
@@ -32,17 +27,17 @@ class UploadVideoToS3View(APIView):
         # Inicializamos el cliente de S3 con las credenciales proporcionadas
         s3 = boto3.client(
             's3',
-            aws_access_key_id=AWS_ACCESS_KEY,
-            aws_secret_access_key=AWS_SECRET_KEY,
-            region_name=S3_REGION
+            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+            region_name=settings.AWS_S3_REGION_NAME
         )
 
         try:
             # Subir archivo a S3
-            s3.upload_fileobj(video_file, S3_BUCKET, video_file.name, ExtraArgs={'ContentType': video_file.content_type})
+            s3.upload_fileobj(video_file, settings.AWS_STORAGE_BUCKET_NAME, video_file.name, ExtraArgs={'ContentType': video_file.content_type})
             
             # Generar la URL del archivo subido
-            url = f"https://{S3_BUCKET}.s3.{S3_REGION}.amazonaws.com/{video_file.name}"
+            url = f"https://{settings.AWS_STORAGE_BUCKET_NAME}.s3.{settings.AWS_S3_REGION_NAME}.amazonaws.com/{video_file.name}"
             
             return Response({"message": "Archivo subido con éxito", "url": url}, status=status.HTTP_200_OK)
 

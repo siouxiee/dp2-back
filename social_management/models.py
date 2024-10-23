@@ -65,7 +65,7 @@ class Post(models.Model):
     preview = models.URLField(null=True, blank=True)
     media = models.FileField(upload_to= 'posts',null=True, blank=True)
 
-    fecha_publicacion = models.DateField()
+    fecha_publicacion = models.DateField(null=True, blank=True)
     #No mostrar
     fecha_creacion = models.DateField(auto_now_add=True)
     fecha_modificacion = models.DateField(auto_now=True)
