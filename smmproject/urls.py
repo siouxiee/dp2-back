@@ -25,4 +25,5 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     #path('social_management/', include('social_management.urls')),
     path('', include('social_management.urls')),
+    path('', include('customer_analytics.urls')), 
 ]
