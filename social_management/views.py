@@ -106,38 +106,77 @@ def desvincular_cuenta(request):
 
 
 @api_view(['GET'])
-def obtener_posts_programados(request):
-    # Filtra los posts programados
-    posts_programados = Post.objects.filter(estado='P')
-    # Serializa los datos
-    serializer = PostSerializer(posts_programados, many=True)
-    return Response(serializer.data)
+def obtener_posts(request):
+    offset = int(request.GET.get('offset', 0))
+    limit = int(request.GET.get('limit', 10))
+    red_social = request.GET.get('redSocial')
+    tipo_publicacion = request.GET.get('tipoPublicacion')
+    estado = request.GET.get('estado')
+    tags = request.GET.getlist('tags')
 
+    filtros = Q()
+    
+    if red_social:
+        filtros &= Q(red_social=red_social)
+    
+    if tipo_publicacion:
+        filtros &= Q(tipo=tipo_publicacion)
+    
+    if estado:
+        filtros &= Q(estado=estado)
+    
+    if tags:
+        filtros &= Q(postetiqueta__etiqueta__nombre__in=tags)
+
+    posts = Post.objects.filter(filtros).distinct().order_by('fecha_creacion')[offset:offset + limit]
+
+    serializer = PostSerializer(posts, many=True)
+    
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def obtener_post_por_id(request, postId):
+    try:
+        post = Post.objects.get(id=postId)
+    except Post.DoesNotExist:
+        raise Http404("El post no existe.")
+    
+    serializer = PostSerializer(post)
+    return Response(serializer.data)
 
 @api_view(['POST'])
 def crear_post(request):
-    usuario = request.data.get('usuario')
+    data = request.data
+    serializer = PostSerializer(data=data)
+    
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PUT'])
+def actualizar_post(request, postId):
     try:
-        cuenta = CuentaRedSocial.objects.get(usuario=usuario)
+        post = Post.objects.get(id=postId)
+    except Post.DoesNotExist:
+        return Response({"error": "Post no encontrado"}, status=status.HTTP_404_NOT_FOUND)
+    
+    serializer = PostSerializer(post, data=request.data)
+    
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        # Verificar si el token expira en menos de 1 día y renovarlo
-        if cuenta.fecha_expiracion_token <= datetime.now() + timedelta(days=1):
-            if not renovar_token_largo_duracion(cuenta):
-                return Response(
-                    {'error': 'No se pudo renovar el token. Intenta vincular la cuenta de nuevo.'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-
-        # Crear el post si el token es válido
-        post = Post.objects.create(**request.data)
-        return Response({'message': 'Post creado exitosamente.'}, status=status.HTTP_201_CREATED)
-
-    except CuentaRedSocial.DoesNotExist:
-        return Response({'error': 'Cuenta no encontrada.'}, status=status.HTTP_404_NOT_FOUND)
-    except Exception as e:
-        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-
+@api_view(['GET'])
+def obtener_posts_programados(request):
+    # Filtra los posts programados
+    posts_programados = Post.objects.filter(is_programmed=True)
+    # Serializa los datos
+    serializer = PostSerializer(posts_programados, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def publicar_video(request):
