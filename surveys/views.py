@@ -7,24 +7,23 @@ from .serializers import QuestionSerializer,ResponseSerializer, EncuestaSerializ
 
 @api_view(['GET'])
 def obtener_encuestas(request):
-    # Obtener los parámetros de filtro de la solicitud
+    # Obtener los parámetros de la solicitud
+    offset = int(request.query_params.get('offset', 0))
+    limit = int(request.query_params.get('limit', 10))
     estado = request.query_params.get('estado')
-    limite = request.query_params.get('limite')
 
-    # Filtrar las encuestas según el estado si se proporciona
+    # Filtrar encuestas por estado si se proporciona
     encuestas = Encuesta.objects.all()
     if estado:
         encuestas = encuestas.filter(status=estado)
 
-    # Aplicar el límite si se proporciona
-    if limite:
-        try:
-            limite = int(limite)
-            encuestas = encuestas[:limite]
-        except ValueError:
-            return Response({"message": "El parámetro 'limite' debe ser un número entero."}, status=400)
+    # Obtener la cantidad total de encuestas filtradas
+    total_encuestas = encuestas.count()
 
-    # Serializar las encuestas sin incluir preguntas ni respuestas
+    # Aplicar la paginación con offset y limit
+    encuestas = encuestas[offset:offset + limit]
+
+    # Serializar los datos (excluir preguntas y respuestas)
     encuestas_data = [
         {
             "id": encuesta.id,
@@ -32,13 +31,26 @@ def obtener_encuestas(request):
             "description": encuesta.description,
             "status": encuesta.status,
             "start_date": encuesta.start_date,
-            "end_date": encuesta.end_date,
+            "end_date": encuesta.end_date
         }
         for encuesta in encuestas
     ]
 
-    # Devolver la respuesta con los datos de las encuestas
-    return Response(encuestas_data)
+    # Preparar la respuesta con metadatos y datos de encuestas
+    response_data = {
+        "metadata": {
+            "result_set": {
+                "count": len(encuestas_data),
+                "offset": offset,
+                "limit": limit,
+                "total": total_encuestas
+            }
+        },
+        "data": encuestas_data
+    }
+
+    # Retornar la respuesta
+    return Response(response_data)
 
 class QuestionViewSet(viewsets.ModelViewSet):
     queryset = Question.objects.all()
