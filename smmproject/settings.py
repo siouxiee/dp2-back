@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'marketing_campaigns',
     'social_management',
     'rest_framework',
+    'surveys',
     'corsheaders',
     'drf_yasg',
 ]
