@@ -2733,6 +2733,595 @@ paths:
           description: ''
       tags:
       - producto-subcategorias
+  /ventas-por-producto/:
+    get:
+      operationId: listventas_por_productos
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+          description: ''
+      tags:
+      - ventas-por-producto
+  /ventas-por-producto/{id_producto}/:
+    get:
+      operationId: retrieveventas_por_producto
+      description: ''
+      parameters:
+      - name: id_producto
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - ventas-por-producto
+  /ventas/totales/:
+    get:
+      operationId: listventas_totales_fechas
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+          description: ''
+      tags:
+      - ventas
+  /questions/:
+    get:
+      operationId: listQuestions
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Question'
+          description: ''
+      tags:
+      - questions
+    post:
+      operationId: createQuestion
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Question'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Question'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Question'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+          description: ''
+      tags:
+      - questions
+  /questions/{id}/:
+    get:
+      operationId: retrieveQuestion
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this question.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+          description: ''
+      tags:
+      - questions
+    put:
+      operationId: updateQuestion
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this question.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Question'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Question'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Question'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+          description: ''
+      tags:
+      - questions
+    patch:
+      operationId: partialUpdateQuestion
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this question.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Question'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Question'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Question'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+          description: ''
+      tags:
+      - questions
+    delete:
+      operationId: destroyQuestion
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this question.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - questions
+  /responses/:
+    get:
+      operationId: listResponses
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Response'
+          description: ''
+      tags:
+      - responses
+    post:
+      operationId: createResponse
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Response'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Response'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Response'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+          description: ''
+      tags:
+      - responses
+  /responses/{id}/:
+    get:
+      operationId: retrieveResponse
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this response.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+          description: ''
+      tags:
+      - responses
+    put:
+      operationId: updateResponse
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this response.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Response'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Response'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Response'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+          description: ''
+      tags:
+      - responses
+    patch:
+      operationId: partialUpdateResponse
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this response.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Response'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Response'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Response'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+          description: ''
+      tags:
+      - responses
+    delete:
+      operationId: destroyResponse
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this response.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - responses
+  /encuestas/:
+    get:
+      operationId: listEncuesta
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Encuesta'
+          description: ''
+      tags:
+      - encuestas
+    post:
+      operationId: createEncuesta
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Encuesta'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Encuesta'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Encuesta'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Encuesta'
+          description: ''
+      tags:
+      - encuestas
+  /encuestas/{id}/:
+    get:
+      operationId: retrieveEncuesta
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this encuesta.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Encuesta'
+          description: ''
+      tags:
+      - encuestas
+    put:
+      operationId: updateEncuesta
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this encuesta.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Encuesta'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Encuesta'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Encuesta'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Encuesta'
+          description: ''
+      tags:
+      - encuestas
+    patch:
+      operationId: partialUpdateEncuesta
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this encuesta.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Encuesta'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Encuesta'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Encuesta'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Encuesta'
+          description: ''
+      tags:
+      - encuestas
+    delete:
+      operationId: destroyEncuesta
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique value identifying this encuesta.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - encuestas
+  /answers/:
+    get:
+      operationId: listAnswers
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Answer'
+          description: ''
+      tags:
+      - answers
+    post:
+      operationId: createAnswer
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Answer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Answer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Answer'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Answer'
+          description: ''
+      tags:
+      - answers
+  /answers/{id}/:
+    get:
+      operationId: retrieveAnswer
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this answer.
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Answer'
+          description: ''
+      tags:
+      - answers
+    put:
+      operationId: updateAnswer
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this answer.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Answer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Answer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Answer'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Answer'
+          description: ''
+      tags:
+      - answers
+    patch:
+      operationId: partialUpdateAnswer
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this answer.
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Answer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Answer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Answer'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Answer'
+          description: ''
+      tags:
+      - answers
+    delete:
+      operationId: destroyAnswer
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this answer.
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - answers
   /cuentas/crear/:
     post:
       operationId: createcrear_cuenta_red_social
@@ -3834,3 +4423,85 @@ components:
       - usuario_actualizacion
       - id_producto
       - id_subcategoria
+    Question:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 50
+        title:
+          type: string
+          maxLength: 255
+        type:
+          type: string
+          maxLength: 50
+        required:
+          type: boolean
+        options:
+          type: object
+          nullable: true
+        encuesta:
+          type: string
+      required:
+      - id
+      - title
+      - type
+      - encuesta
+    Response:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 50
+        date:
+          type: string
+          format: date-time
+        encuesta:
+          type: string
+      required:
+      - id
+      - date
+      - encuesta
+    Encuesta:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 50
+        title:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+        status:
+          type: string
+          maxLength: 50
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+      required:
+      - id
+      - title
+      - status
+      - start_date
+      - end_date
+    Answer:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        answer:
+          type: string
+        response:
+          type: string
+        question:
+          type: string
+      required:
+      - answer
+      - response
+      - question

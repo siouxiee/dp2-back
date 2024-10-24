@@ -2,41 +2,6 @@ import requests
 import boto3
 from botocore.exceptions import NoCredentialsError
 from smmproject import settings 
-import requests
-from datetime import timedelta
-from django.utils.timezone import now
-
-from decouple import config
-
-def renovar_token_largo_duracion(cuenta):
-    try:
-        url = "https://graph.facebook.com/v12.0/oauth/access_token"
-        params = {
-            'grant_type': 'fb_exchange_token',
-            'client_id': config('FACEBOOK_APP_ID'),
-            'client_secret': config('FACEBOOK_APP_SECRET'),
-            'fb_exchange_token': cuenta.token_autenticacion,
-        }
-        response = requests.get(url, params=params)
-        response_data = response.json()
-
-        if 'access_token' in response_data:
-            cuenta.token_autenticacion = response_data['access_token']
-            cuenta.fecha_expiracion_token = now() + timedelta(days=60)
-            cuenta.save()
-            return True
-        else:
-            raise Exception(f"Error al renovar el token: {response_data.get('error', 'Desconocido')}")
-    except Exception as e:
-        print(f"Error al renovar el token: {str(e)}")
-        return False
-
-
-def verificar_y_renovar_token(cuenta):
-    # Verifica si el token está por expirar y lo renueva si es necesario.
-    if cuenta.fecha_expiracion_token <= now() + timedelta(days=1):  # Comparación usando `now()`
-        if not renovar_token_largo_duracion(cuenta):
-            raise Exception("No se pudo renovar el token de larga duración.")
 
 def obtener_url_s3(nombre_archivo):
     # Crear cliente S3 utilizando las credenciales proporcionadas
@@ -96,7 +61,3 @@ def publicar_video_tiktok(access_token, nombre_archivo_s3):
         # Capturar cualquier otra excepción que ocurra
         print(f"Error en la solicitud a TikTok: {e}")
         return {"error": f"Excepción: {str(e)}"}
-
-
-
-

@@ -1,26 +1,37 @@
 from django.db import models
 
-# Create your models here.
+class RedSocial(models.Model):
+    nombre = models.CharField(max_length=100)
+    limite_caracteres = models.IntegerField()
+    api_url = models.URLField()
+    api_version = models.CharField(max_length=10, null=True, blank=True)
+
+    class Meta:
+        db_table = 'vi_redsocial'
+
+    def __str__(self):
+        return self.nombre
+
 
 class CuentaRedSocial(models.Model):
-    red_social = models.CharField(max_length=50)
+    red_social = models.ForeignKey(RedSocial, on_delete=models.CASCADE)
 
-    usuario = models.CharField(max_length=100)  # Nombre de usuario en la red social
-    open_id = models.CharField(max_length=255, null=True, blank=True)  # ID único (TikTok, Facebook)
+    usuario = models.CharField(max_length=100)
+    open_id = models.CharField(max_length=255, null=True, blank=True)
 
-    page_id = models.CharField(max_length=255, blank=True, null=True)  # ID de la página de Facebook
-    instagram_business_account = models.CharField(max_length=255, blank=True, null=True)  # IG Business Account ID
+    page_id = models.CharField(max_length=255, blank=True, null=True)
+    instagram_business_account = models.CharField(max_length=255, blank=True, null=True)
 
     # Gestión de tokens
-    token_autenticacion = models.TextField()  # Access Token
-    refresh_token = models.TextField(blank=True, null=True)  # Refresh Token
-    tipo_autenticacion = models.CharField(max_length=50, default='Bearer')  # OAuth2, Bearer, etc.
+    token_autenticacion = models.TextField()
+    refresh_token = models.TextField(blank=True, null=True)
+    tipo_autenticacion = models.CharField(max_length=50, default='Bearer')
 
     # Fechas de vencimiento de los tokens
-    fecha_expiracion_token = models.DateTimeField()  # Expiración del Access Token
-    fecha_expiracion_refresh = models.DateTimeField(blank=True, null=True)  # Expiración del Refresh Token
+    fecha_expiracion_token = models.DateTimeField()
+    fecha_expiracion_refresh = models.DateTimeField(blank=True, null=True)
 
-    linked = models.BooleanField(default=False)  # Estado de vinculación
+    linked = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'vi_cuentaredsocial'
@@ -38,7 +49,7 @@ class ReporteRedes(models.Model):
     total_interacciones = models.IntegerField()
 
     class Meta:
-        db_table = 'vi_reporteredes'  # Prefijo 'vi_' para la tabla
+        db_table = 'vi_reporteredes'
 
     def __str__(self):
         return f"Reporte del {self.fecha_inicio} al {self.fecha_fin}"
@@ -78,7 +89,6 @@ class Post(models.Model):
     ]
     red_social = models.CharField(max_length=255, choices=RED_CHOICES, default='Facebook')
 
-    #crea un campo de nombre tipo que sea string 
     tipo = models.CharField(max_length=255, null=True, blank=True)
     id_red_social = models.CharField(max_length=255, null=True, blank=True)
     #is_programmed = models.BooleanField(default=False)  # Agregar este campo
@@ -105,7 +115,7 @@ class Interaccion(models.Model):
     id_interaccion_red_social = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
-        db_table = 'vi_interaccion'  # Prefijo 'vi_' para la tabla
+        db_table = 'vi_interaccion'
 
     def __str__(self):
         return f"{self.tipo} de {self.username}"
@@ -119,7 +129,7 @@ class Segmento(models.Model):
     cuenta = models.ForeignKey(CuentaRedSocial, on_delete=models.CASCADE, related_name='segmentos')
 
     class Meta:
-        db_table = 'vi_segmento'  # Prefijo 'vi_' para la tabla
+        db_table = 'vi_segmento'
 
     def __str__(self):
         return self.nombre
@@ -129,7 +139,7 @@ class Etiqueta(models.Model):
     nombre = models.CharField(max_length=100)
 
     class Meta:
-       db_table = 'vi_etiqueta'  # Prefijo 'vi_' para la tabla
+       db_table = 'vi_etiqueta'
 
     def __str__(self):
         return self.nombre
@@ -140,7 +150,7 @@ class PostEtiqueta(models.Model):
     etiqueta = models.ForeignKey(Etiqueta, on_delete=models.CASCADE)
 
     class Meta:
-        db_table = 'vi_postetiqueta'  # Prefijo 'vi_' para la tabla
+        db_table = 'vi_postetiqueta'
 
     def __str__(self):
         return f"Etiqueta: {self.etiqueta.nombre} en Post: {self.post.contenido[:30]}"
