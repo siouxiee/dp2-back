@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework import viewsets
+from rest_framework.response import Response
 # Create your views here.
-from .models import Question,Response, Encuesta, Answer
+from .models import Question,Response as ResponseModel, Encuesta, Answer
 from .serializers import QuestionSerializer,ResponseSerializer, EncuestaSerializer, AnswerSerializer
 
 @api_view(['GET'])
@@ -57,7 +58,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
     serializer_class = QuestionSerializer
 
 class ResponseViewSet(viewsets.ModelViewSet):
-    queryset = Response.objects.all()
+    queryset = ResponseModel.objects.all()
     serializer_class = ResponseSerializer
 
 class EncuestaViewSet(viewsets.ModelViewSet):
