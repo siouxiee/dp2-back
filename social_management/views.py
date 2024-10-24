@@ -3,8 +3,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.views import APIView
-from .models import CuentaRedSocial, Post
-from .serializers import CuentaRedSocialSerializer, PostSerializer
+from .models import CuentaRedSocial, Post, RedSocial
+from .serializers import CuentaRedSocialSerializer, PostSerializer, RedSocialSerializer
 from .services import publicar_video_tiktok
 import boto3
 from botocore.exceptions import NoCredentialsError
@@ -49,8 +49,20 @@ class UploadVideoToS3View(APIView):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+@api_view(['POST'])
+def crear_red_social(request):
+    serializer = RedSocialSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# Vista para crear y guardar una nueva cuenta de red social
+@api_view(['GET'])
+def listar_redes_sociales(request):
+    redes = RedSocial.objects.all()
+    serializer = RedSocialSerializer(redes, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 @api_view(['POST'])
 def crear_cuenta_red_social(request):
     serializer = CuentaRedSocialSerializer(data=request.data)
@@ -60,7 +72,6 @@ def crear_cuenta_red_social(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# Vista para consultar las credenciales de una cuenta de red social
 @api_view(['GET'])
 def obtener_cuentas_red_social(request):
     cuentas = CuentaRedSocial.objects.all()
@@ -111,7 +122,7 @@ def obtener_posts(request):
 @api_view(['GET'])
 def obtener_post_por_id(request, postId):
     try:
-        post = Post.objects.get(id_red_social=postId)
+        post = Post.objects.get(id=postId)
     except Post.DoesNotExist:
         raise Http404("El post no existe.")
     
@@ -120,12 +131,29 @@ def obtener_post_por_id(request, postId):
 
 @api_view(['POST'])
 def crear_post(request):
-    if request.method == 'POST':
-        serializer = PostSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    data = request.data
+    serializer = PostSerializer(data=data)
+    
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PUT'])
+def actualizar_post(request, postId):
+    try:
+        post = Post.objects.get(id=postId)
+    except Post.DoesNotExist:
+        return Response({"error": "Post no encontrado"}, status=status.HTTP_404_NOT_FOUND)
+    
+    serializer = PostSerializer(post, data=request.data)
+    
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def obtener_posts_programados(request):
