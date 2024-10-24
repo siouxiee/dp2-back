@@ -1,8 +1,7 @@
 # .gitignore
 # Python general
-*.py[cod]
-__pycache__/
 *.pyc
+__pycache__/
 *.pyo
 *.pyd
 *.pdb

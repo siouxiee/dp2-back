@@ -1,16 +1,19 @@
-from rest_framework import status, viewsets
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.views import APIView
-from .models import CuentaRedSocial, Post, RedSocial
-from .serializers import CuentaRedSocialSerializer, PostSerializer, RedSocialSerializer
-from .services import publicar_video_tiktok
+from .models import CuentaRedSocial, Post
+from .serializers import CuentaRedSocialSerializer, PostSerializer
+from .services import publicar_video_tiktok, renovar_token_largo_duracion, verificar_y_renovar_token
 import boto3
 from botocore.exceptions import NoCredentialsError
+from rest_framework import viewsets
 from smmproject import settings
-from django.db.models import Q
-from django.http import Http404 
+
+from datetime import datetime, timedelta
+import requests
+import facebook
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
@@ -48,29 +51,37 @@ class UploadVideoToS3View(APIView):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-@api_view(['POST'])
-def crear_red_social(request):
-    serializer = RedSocialSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET'])
-def listar_redes_sociales(request):
-    redes = RedSocial.objects.all()
-    serializer = RedSocialSerializer(redes, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
-
+# Vista para crear y guardar una nueva cuenta de red social
 @api_view(['POST'])
-def crear_cuenta_red_social(request):
+def vincular_cuenta(request):
     serializer = CuentaRedSocialSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        try:
+            # Crear o actualizar la cuenta de red social
+            cuenta, created = CuentaRedSocial.objects.update_or_create(
+                red_social=serializer.validated_data['red_social'],
+                usuario=serializer.validated_data['usuario'],
+                defaults={
+                    'open_id': serializer.validated_data.get('open_id'),
+                    'page_id': serializer.validated_data.get('page_id'),
+                    'instagram_business_account': serializer.validated_data.get('instagram_business_account'),
+                    'token_autenticacion': serializer.validated_data['token_autenticacion'],
+                    'refresh_token': serializer.validated_data.get('refresh_token'),
+                    'tipo_autenticacion': serializer.validated_data['tipo_autenticacion'],
+                    'fecha_expiracion_token': serializer.validated_data['fecha_expiracion_token'],
+                    'fecha_expiracion_refresh': serializer.validated_data.get('fecha_expiracion_refresh'),
+                    'linked': True,
+                }
+            )
+            return Response({'message': 'Cuenta vinculada correctamente.'}, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# Vista para consultar las credenciales de una cuenta de red social
 @api_view(['GET'])
 def obtener_cuentas_red_social(request):
     cuentas = CuentaRedSocial.objects.all()
@@ -79,14 +90,19 @@ def obtener_cuentas_red_social(request):
 
 
 @api_view(['DELETE'])
-def eliminar_token(request, pk):
+def desvincular_cuenta(request):
+    usuario = request.data.get('usuario')
+    red_social = request.data.get('red_social')
+
     try:
-        cuenta = CuentaRedSocial.objects.get(pk=pk)
+        cuenta = CuentaRedSocial.objects.get(usuario=usuario, red_social=red_social)
+        cuenta.delete()
+        return Response({"message": f"Cuenta {red_social} eliminada correctamente."}, status=status.HTTP_204_NO_CONTENT)
     except CuentaRedSocial.DoesNotExist:
         return Response({"error": "Cuenta no encontrada"}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-    cuenta.delete()
-    return Response({"message": "Token eliminado correctamente"}, status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(['GET'])
@@ -176,3 +192,28 @@ def publicar_video(request):
         return Response({"message": "Video publicado con éxito", "data": resultado}, status=200)
     else:
         return Response({"error": "Error al publicar el video"}, status=500)
+    
+
+# VToken de renovacion
+
+@api_view(['POST'])
+def verificar_renovar_token_api(request):
+    usuario = request.data.get('usuario')
+    red_social = request.data.get('red_social')
+
+    try:
+        # Obtener la cuenta desde la base de datos
+        cuenta = CuentaRedSocial.objects.get(usuario=usuario, red_social=red_social)
+
+        # Llamar a la función de verificación y renovación
+        verificar_y_renovar_token(cuenta)
+
+        return Response(
+            {'message': 'Token verificado y renovado si era necesario.'},
+            status=status.HTTP_200_OK
+        )
+    except CuentaRedSocial.DoesNotExist:
+        return Response({'error': 'Cuenta no encontrada.'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
