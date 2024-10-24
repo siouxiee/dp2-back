@@ -10,6 +10,8 @@ import boto3
 from botocore.exceptions import NoCredentialsError
 from rest_framework import viewsets
 from smmproject import settings
+from django.db.models import Q
+from django.http import Http404 
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
@@ -106,6 +108,15 @@ def obtener_posts(request):
     
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+def obtener_post_por_id(request, postId):
+    try:
+        post = Post.objects.get(id_red_social=postId)
+    except Post.DoesNotExist:
+        raise Http404("El post no existe.")
+    
+    serializer = PostSerializer(post)
+    return Response(serializer.data)
 
 @api_view(['POST'])
 def crear_post(request):
@@ -116,6 +127,13 @@ def crear_post(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET'])
+def obtener_posts_programados(request):
+    # Filtra los posts programados
+    posts_programados = Post.objects.filter(is_programmed=True)
+    # Serializa los datos
+    serializer = PostSerializer(posts_programados, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def publicar_video(request):

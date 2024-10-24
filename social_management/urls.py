@@ -3,10 +3,10 @@ from django.urls import path, include
 from . import views
 from .views import crear_post, UploadVideoToS3View, publicar_video
 from rest_framework.routers import DefaultRouter
-from .views import PostViewSet
+from .views import PostViewSet, obtener_post_por_id
 
 router = DefaultRouter()
-router.register(r'posts', PostViewSet)  # La ruta base será /posts/
+router.register(r'posts', PostViewSet)
 
 urlpatterns = [
     path('cuentas/', views.obtener_cuentas_red_social, name='obtener_cuentas_red_social'),
@@ -14,7 +14,14 @@ urlpatterns = [
     path('cuentas/eliminar/<int:pk>/', views.eliminar_token, name='eliminar_token'),
     path('posts/programados/', views.obtener_posts_programados, name='obtener_posts_programados'),
     path('posts/crear/', crear_post, name='crear_post'),
-    path('posts/', views.obtener_posts, name='obtener_posts'),  # Endpoint para obtener los posts con filtros
+
+
+    path('posts/', views.obtener_posts, name='obtener_posts'),
+    path('posts/<str:postId>/', obtener_post_por_id, name='obtener_post_por_id'),
+
+
+
+
     path('videos/upload/', UploadVideoToS3View.as_view(), name='upload_video_to_s3'),
     path('videos/publicar/', publicar_video, name='publicar_video_tiktok'),
     path('', include(router.urls)),  # Incluye las rutas generadas por el router
