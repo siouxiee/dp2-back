@@ -6,6 +6,16 @@ from rest_framework.response import Response
 from .models import Question,Response as ResponseModel, Encuesta, Answer
 from .serializers import QuestionSerializer,ResponseSerializer, EncuestaSerializer, AnswerSerializer
 
+@api_view(['POST'])
+def crear_encuesta(request):
+    # Usar el serializer para validar y crear la encuesta
+    serializer = EncuestaSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 @api_view(['GET'])
 def obtener_encuestas(request):
     # Obtener los parámetros de la solicitud

@@ -2,7 +2,6 @@ from django.db import models
 
 # Create your models here.
 class Encuesta(models.Model):
-    id = models.CharField(max_length=50, primary_key=True)
     title = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
     status = models.CharField(max_length=50)
@@ -13,7 +12,6 @@ class Encuesta(models.Model):
         return self.title
 
 class Question(models.Model):
-    id = models.CharField(max_length=50, primary_key=True)
     encuesta = models.ForeignKey(Encuesta, related_name='questions', on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     type = models.CharField(max_length=50)
@@ -24,7 +22,6 @@ class Question(models.Model):
         return f"{self.title} - {self.encuesta.title}"
 
 class Response(models.Model):
-    id = models.CharField(max_length=50, primary_key=True)
     encuesta = models.ForeignKey(Encuesta, related_name='responses', on_delete=models.CASCADE)
     date = models.DateTimeField()
 
