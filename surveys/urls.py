@@ -11,4 +11,4 @@ router.register(r'answers', AnswerViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('encuestas/', obtener_encuestas, name='obtener_encuestas'),]
+    path('surveys/', obtener_encuestas, name='obtener_encuestas'),]
