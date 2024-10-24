@@ -1,7 +1,7 @@
 from django.urls import path, include
 from . import views
 from .views import UploadVideoToS3View, publicar_video
-from .views import PostViewSet, obtener_post_por_id, crear_post, actualizar_post
+from .views import PostViewSet, obtener_posts_programados, obtener_post_por_id, crear_post, actualizar_post
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
@@ -17,12 +17,12 @@ urlpatterns = [
     path('cuentas/crear/', views.crear_cuenta_red_social, name='crear_cuenta_red_social'),
     path('cuentas/eliminar/<int:pk>/', views.eliminar_token, name='eliminar_token'),
     
-
+    path('posts/programados/', views.obtener_posts_programados, name='obtener_posts_programados'),
     path('posts/crear/', crear_post, name='crear_post'),
     path('posts/', views.obtener_posts, name='obtener_posts'),
     path('posts/<str:postId>/', obtener_post_por_id, name='obtener_post_por_id'),
     path('posts/actualizar/<str:postId>/', actualizar_post, name='actualizar_post'),
-    path('posts/programados/', views.obtener_posts_programados, name='obtener_posts_programados'),
+    
 
 
     path('videos/upload/', UploadVideoToS3View.as_view(), name='upload_video_to_s3'),
