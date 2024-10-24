@@ -24,7 +24,9 @@ urlpatterns = [
     path('posts/<str:postId>/', obtener_post_por_id, name='obtener_post_por_id'),
     path('posts/actualizar/<str:postId>/', actualizar_post, name='actualizar_post'),
     
-
+    path('cuentas/vincular/', vincular_cuenta, name='vincular_cuenta'),
+    path('cuentas/desvincular/', desvincular_cuenta, name='desvincular_cuenta'),    
+    path('cuentas/verificar-renovar/', verificar_renovar_token_api, name='verificar_renovar_token_api'), #solo es una prueba
 
     path('videos/upload/', UploadVideoToS3View.as_view(), name='upload_video_to_s3'),
     path('videos/publicar/', publicar_video, name='publicar_video_tiktok'),
