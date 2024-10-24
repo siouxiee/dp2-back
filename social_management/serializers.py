@@ -16,5 +16,4 @@ class CuentaRedSocialSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        exclude = ('fecha_modificacion', 'fecha_creacion')  # Excluir los campos especificados
-        #fields = '__all__'
+        exclude = ('fecha_modificacion', 'fecha_creacion')

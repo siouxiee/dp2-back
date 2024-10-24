@@ -78,12 +78,33 @@ def eliminar_token(request, pk):
 
 
 @api_view(['GET'])
-def obtener_posts_programados(request):
-    # Filtra los posts programados
-    posts_programados = Post.objects.filter(estado='P')
-    # Serializa los datos
-    serializer = PostSerializer(posts_programados, many=True)
-    return Response(serializer.data)
+def obtener_posts(request):
+    offset = int(request.GET.get('offset', 0))
+    limit = int(request.GET.get('limit', 10))
+    red_social = request.GET.get('redSocial')
+    tipo_publicacion = request.GET.get('tipoPublicacion')
+    estado = request.GET.get('estado')
+    tags = request.GET.getlist('tags')
+
+    filtros = Q()
+    
+    if red_social:
+        filtros &= Q(red_social=red_social)
+    
+    if tipo_publicacion:
+        filtros &= Q(tipo=tipo_publicacion)
+    
+    if estado:
+        filtros &= Q(estado=estado)
+    
+    if tags:
+        filtros &= Q(postetiqueta__etiqueta__nombre__in=tags)
+
+    posts = Post.objects.filter(filtros).distinct().order_by('fecha_creacion')[offset:offset + limit]
+
+    serializer = PostSerializer(posts, many=True)
+    
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])

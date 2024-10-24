@@ -1,8 +1,7 @@
 # social_management/urls.py
-from django.urls import path,include
+from django.urls import path, include
 from . import views
-from .views import crear_post
-from .views import UploadVideoToS3View, publicar_video
+from .views import crear_post, UploadVideoToS3View, publicar_video
 from rest_framework.routers import DefaultRouter
 from .views import PostViewSet
 
@@ -15,6 +14,7 @@ urlpatterns = [
     path('cuentas/eliminar/<int:pk>/', views.eliminar_token, name='eliminar_token'),
     path('posts/programados/', views.obtener_posts_programados, name='obtener_posts_programados'),
     path('posts/crear/', crear_post, name='crear_post'),
+    path('posts/', views.obtener_posts, name='obtener_posts'),  # Endpoint para obtener los posts con filtros
     path('videos/upload/', UploadVideoToS3View.as_view(), name='upload_video_to_s3'),
     path('videos/publicar/', publicar_video, name='publicar_video_tiktok'),
     path('', include(router.urls)),  # Incluye las rutas generadas por el router
