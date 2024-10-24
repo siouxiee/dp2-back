@@ -14,24 +14,24 @@ class RedSocial(models.Model):
 
 
 class CuentaRedSocial(models.Model):
-    red_social = models.ForeignKey(RedSocial, on_delete=models.CASCADE)
+    red_social = models.CharField(max_length=50)
 
-    usuario = models.CharField(max_length=100)
-    open_id = models.CharField(max_length=255, null=True, blank=True)
+    usuario = models.CharField(max_length=100)  # Nombre de usuario en la red social
+    open_id = models.CharField(max_length=255, null=True, blank=True)  # ID único (TikTok, Facebook)
 
-    page_id = models.CharField(max_length=255, blank=True, null=True)
-    instagram_business_account = models.CharField(max_length=255, blank=True, null=True)
+    page_id = models.CharField(max_length=255, blank=True, null=True)  # ID de la página de Facebook
+    instagram_business_account = models.CharField(max_length=255, blank=True, null=True)  # IG Business Account ID
 
     # Gestión de tokens
-    token_autenticacion = models.TextField()
-    refresh_token = models.TextField(blank=True, null=True)
-    tipo_autenticacion = models.CharField(max_length=50, default='Bearer')
+    token_autenticacion = models.TextField()  # Access Token
+    refresh_token = models.TextField(blank=True, null=True)  # Refresh Token
+    tipo_autenticacion = models.CharField(max_length=50, default='Bearer')  # OAuth2, Bearer, etc.
 
     # Fechas de vencimiento de los tokens
-    fecha_expiracion_token = models.DateTimeField()
-    fecha_expiracion_refresh = models.DateTimeField(blank=True, null=True)
+    fecha_expiracion_token = models.DateTimeField()  # Expiración del Access Token
+    fecha_expiracion_refresh = models.DateTimeField(blank=True, null=True)  # Expiración del Refresh Token
 
-    linked = models.BooleanField(default=False)
+    linked = models.BooleanField(default=False)  # Estado de vinculación
 
     class Meta:
         db_table = 'vi_cuentaredsocial'
@@ -89,6 +89,7 @@ class Post(models.Model):
     ]
     red_social = models.CharField(max_length=255, choices=RED_CHOICES, default='Facebook')
 
+    #crea un campo de nombre tipo que sea string 
     tipo = models.CharField(max_length=255, null=True, blank=True)
     id_red_social = models.CharField(max_length=255, null=True, blank=True)
     #is_programmed = models.BooleanField(default=False)  # Agregar este campo
