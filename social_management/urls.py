@@ -3,6 +3,7 @@ from . import views
 from .views import UploadVideoToS3View, publicar_video
 from .views import PostViewSet, obtener_posts_programados, obtener_post_por_id, crear_post, actualizar_post
 from rest_framework.routers import DefaultRouter
+from .views import PostViewSet, vincular_cuenta, desvincular_cuenta, verificar_renovar_token_api
 
 router = DefaultRouter()
 router.register(r'posts', PostViewSet)
