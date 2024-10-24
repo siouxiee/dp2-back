@@ -1,21 +1,9 @@
 from django.db import models
 
 # Create your models here.
-class RedSocial(models.Model):
-    nombre = models.CharField(max_length=100)
-    limite_caracteres = models.IntegerField()
-    api_url = models.URLField()  # URL base de la API de la red social
-    api_version = models.CharField(max_length=10, null=True, blank=True)  # Ejemplo: v12.0 para Meta
-
-    class Meta:
-        db_table = 'vi_redsocial'  # Prefijo 'vi_' para la tabla
-
-    def __str__(self):
-        return self.nombre
-
 
 class CuentaRedSocial(models.Model):
-    red_social = models.ForeignKey(RedSocial, on_delete=models.CASCADE)
+    red_social = models.CharField(max_length=50)
 
     usuario = models.CharField(max_length=100)  # Nombre de usuario en la red social
     open_id = models.CharField(max_length=255, null=True, blank=True)  # ID único (TikTok, Facebook)

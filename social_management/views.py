@@ -4,12 +4,15 @@ from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.views import APIView
 from .models import CuentaRedSocial, Post
-from .serializers import CuentaRedSocialSerializer, PostSerializer
+from .serializers import CuentaRedSocialSerializer, PostSerializer, DesvincularCuentaSerializer
 from .services import publicar_video_tiktok
 import boto3
 from botocore.exceptions import NoCredentialsError
 from rest_framework import viewsets
 from smmproject import settings
+
+from datetime import datetime, timedelta
+import facebook
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
@@ -110,3 +113,58 @@ def publicar_video(request):
         return Response({"message": "Video publicado con éxito", "data": resultado}, status=200)
     else:
         return Response({"error": "Error al publicar el video"}, status=500)
+    
+
+# Vincular y desvincular cuentas
+
+@api_view(['POST'])
+def vincular_cuenta(request):
+    serializer = CuentaRedSocialSerializer(data=request.data)
+    if serializer.is_valid():
+        try:
+            # Crear o actualizar la cuenta de red social
+            cuenta, created = CuentaRedSocial.objects.update_or_create(
+                red_social=serializer.validated_data['red_social'],
+                usuario=serializer.validated_data['usuario'],
+                defaults={
+                    'open_id': serializer.validated_data.get('open_id'),
+                    'page_id': serializer.validated_data.get('page_id'),
+                    'instagram_business_account': serializer.validated_data.get('instagram_business_account'),
+                    'token_autenticacion': serializer.validated_data['token_autenticacion'],
+                    'refresh_token': serializer.validated_data.get('refresh_token'),
+                    'tipo_autenticacion': serializer.validated_data['tipo_autenticacion'],
+                    'fecha_expiracion_token': serializer.validated_data['fecha_expiracion_token'],
+                    'fecha_expiracion_refresh': serializer.validated_data.get('fecha_expiracion_refresh'),
+                    'linked': True,
+                }
+            )
+            return Response({'message': 'Cuenta vinculada correctamente.'}, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+# DESVINCULAR CUENTA
+@api_view(['POST'])
+def desvincular_cuenta(request):
+    serializer = DesvincularCuentaSerializer(data=request.data)
+    if serializer.is_valid():
+        try:
+            cuenta = CuentaRedSocial.objects.get(
+                red_social=serializer.validated_data['red_social'],
+                usuario=serializer.validated_data['usuario']
+            )
+            cuenta.delete()
+            return Response(
+                {'message': f'Cuenta {serializer.validated_data["red_social"]} desvinculada correctamente.'},
+                status=status.HTTP_200_OK
+            )
+        except CuentaRedSocial.DoesNotExist:
+            return Response({'error': 'Cuenta no encontrada.'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+

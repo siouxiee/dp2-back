@@ -4,12 +4,15 @@ from . import views
 from .views import crear_post
 from .views import UploadVideoToS3View, publicar_video
 from rest_framework.routers import DefaultRouter
-from .views import PostViewSet
+from .views import PostViewSet, vincular_cuenta, desvincular_cuenta
 
 router = DefaultRouter()
 router.register(r'posts', PostViewSet)  # La ruta base será /posts/
 
 urlpatterns = [
+    path('cuentas/vincular/', vincular_cuenta, name='vincular_cuenta'),
+    path('cuentas/desvincular/', desvincular_cuenta, name='desvincular_cuenta'),
+
     path('cuentas/', views.obtener_cuentas_red_social, name='obtener_cuentas_red_social'),
     path('cuentas/crear/', views.crear_cuenta_red_social, name='crear_cuenta_red_social'),
     path('cuentas/eliminar/<int:pk>/', views.eliminar_token, name='eliminar_token'),

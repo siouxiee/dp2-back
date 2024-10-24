@@ -8,6 +8,10 @@ class CuentaRedSocialSerializer(serializers.ModelSerializer):
         model = CuentaRedSocial
         fields = '__all__'
 
+class DesvincularCuentaSerializer(serializers.Serializer):
+    red_social = serializers.CharField(max_length=50)
+    usuario = serializers.CharField(max_length=100)
+
 #class PostSerializer(serializers.ModelSerializer):
 #    class Meta:
 #        model = Post
