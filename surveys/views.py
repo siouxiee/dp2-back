@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view
-from rest_framework import viewsets
+from rest_framework import viewsets,status
 from rest_framework.response import Response
 # Create your views here.
 from .models import Question,Response as ResponseModel, Encuesta, Answer
@@ -52,6 +52,51 @@ def obtener_encuestas(request):
 
     # Retornar la respuesta
     return Response(response_data)
+
+@api_view(['GET'])
+def obtener_encuesta_por_id(request, survey_id):
+    try:
+        # Buscar la encuesta por su ID
+        encuesta = Encuesta.objects.get(id=survey_id)
+    except Encuesta.DoesNotExist:
+        # Si no se encuentra la encuesta, devolver un error 404
+        return Response({"detail": "Encuesta no encontrada."}, status=status.HTTP_404_NOT_FOUND)
+    
+    # Serializar la encuesta, incluyendo preguntas y respuestas relacionadas
+    encuesta_data = {
+        "id": encuesta.id,
+        "title": encuesta.title,
+        "description": encuesta.description,
+        "status": encuesta.status,
+        "start_date": encuesta.start_date,
+        "end_date": encuesta.end_date,
+        "questions": [
+            {
+                "id": question.id,
+                "title": question.title,
+                "type": question.type,
+                "options": question.options or [],
+            }
+            for question in encuesta.questions.all()
+        ],
+        "responses": [
+            {
+                "id": response.id,
+                "date": response.date,
+                "answers": [
+                    {
+                        "question_id": answer.question_id,
+                        "answer": answer.answer,
+                    }
+                    for answer in response.answers.all()
+                ]
+            }
+            for response in encuesta.responses.all()
+        ]
+    }
+
+    # Devolver la respuesta con los datos de la encuesta
+    return Response(encuesta_data, status=status.HTTP_200_OK)
 
 class QuestionViewSet(viewsets.ModelViewSet):
     queryset = Question.objects.all()
