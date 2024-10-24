@@ -93,10 +93,10 @@ CORS_ALLOW_ALL_ORIGINS = True
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'villaizan',
+        'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD': 'S2vwLU8uJMf',
-		'HOST': 'ecommerce-db.cy6fsvtblkt9.us-east-1.rds.amazonaws.com',
+        'PASSWORD': 'HolaMundo2025',
+		'HOST': 'dp2-pruebas-2c.cybvloot89zv.us-east-1.rds.amazonaws.com',
         'PORT': '5432',
     }
 }

@@ -3,8 +3,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.views import APIView
-from .models import CuentaRedSocial, Post, RedSocial
-from .serializers import CuentaRedSocialSerializer, PostSerializer, RedSocialSerializer
+from .models import CuentaRedSocial, Post
+from .serializers import CuentaRedSocialSerializer, PostSerializer
 from .services import publicar_video_tiktok
 import boto3
 from botocore.exceptions import NoCredentialsError
@@ -49,27 +49,12 @@ class UploadVideoToS3View(APIView):
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['POST'])
-def crear_red_social(request):
-    serializer = RedSocialSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['GET'])
-def listar_redes_sociales(request):
-    redes = RedSocial.objects.all()
-    serializer = RedSocialSerializer(redes, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
-
-@api_view(['POST'])
 def crear_cuenta_red_social(request):
     serializer = CuentaRedSocialSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 @api_view(['GET'])
 def obtener_cuentas_red_social(request):
@@ -93,15 +78,11 @@ def eliminar_token(request, pk):
 def obtener_posts(request):
     offset = int(request.GET.get('offset', 0))
     limit = int(request.GET.get('limit', 10))
-    red_social = request.GET.get('redSocial')
     tipo_publicacion = request.GET.get('tipoPublicacion')
     estado = request.GET.get('estado')
     tags = request.GET.getlist('tags')
 
     filtros = Q()
-    
-    if red_social:
-        filtros &= Q(red_social=red_social)
     
     if tipo_publicacion:
         filtros &= Q(tipo=tipo_publicacion)

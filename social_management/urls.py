@@ -9,10 +9,6 @@ router.register(r'posts', PostViewSet)
 
 urlpatterns = [
 
-    path('redes/crear/', views.crear_red_social, name='crear_red_social'),
-    path('redes/', views.listar_redes_sociales, name='listar_redes_sociales'),
-
-
     path('cuentas/', views.obtener_cuentas_red_social, name='obtener_cuentas_red_social'),
     path('cuentas/crear/', views.crear_cuenta_red_social, name='crear_cuenta_red_social'),
     path('cuentas/eliminar/<int:pk>/', views.eliminar_token, name='eliminar_token'),
@@ -23,8 +19,6 @@ urlpatterns = [
     path('posts/<str:postId>/', obtener_post_por_id, name='obtener_post_por_id'),
     path('posts/actualizar/<str:postId>/', actualizar_post, name='actualizar_post'),
     
-
-
     path('videos/upload/', UploadVideoToS3View.as_view(), name='upload_video_to_s3'),
     path('videos/publicar/', publicar_video, name='publicar_video_tiktok'),
     path('', include(router.urls)),  # Incluye las rutas generadas por el router
