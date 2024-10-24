@@ -1,17 +1,6 @@
 from django.db import models
 
-class RedSocial(models.Model):
-    nombre = models.CharField(max_length=100)
-    limite_caracteres = models.IntegerField()
-    api_url = models.URLField()
-    api_version = models.CharField(max_length=10, null=True, blank=True)
-
-    class Meta:
-        db_table = 'vi_redsocial'
-
-    def __str__(self):
-        return self.nombre
-
+# Create your models here.
 
 class CuentaRedSocial(models.Model):
     red_social = models.CharField(max_length=50)
@@ -49,7 +38,7 @@ class ReporteRedes(models.Model):
     total_interacciones = models.IntegerField()
 
     class Meta:
-        db_table = 'vi_reporteredes'
+        db_table = 'vi_reporteredes'  # Prefijo 'vi_' para la tabla
 
     def __str__(self):
         return f"Reporte del {self.fecha_inicio} al {self.fecha_fin}"
@@ -116,7 +105,7 @@ class Interaccion(models.Model):
     id_interaccion_red_social = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
-        db_table = 'vi_interaccion'
+        db_table = 'vi_interaccion'  # Prefijo 'vi_' para la tabla
 
     def __str__(self):
         return f"{self.tipo} de {self.username}"
@@ -130,7 +119,7 @@ class Segmento(models.Model):
     cuenta = models.ForeignKey(CuentaRedSocial, on_delete=models.CASCADE, related_name='segmentos')
 
     class Meta:
-        db_table = 'vi_segmento'
+        db_table = 'vi_segmento'  # Prefijo 'vi_' para la tabla
 
     def __str__(self):
         return self.nombre
@@ -140,7 +129,7 @@ class Etiqueta(models.Model):
     nombre = models.CharField(max_length=100)
 
     class Meta:
-       db_table = 'vi_etiqueta'
+       db_table = 'vi_etiqueta'  # Prefijo 'vi_' para la tabla
 
     def __str__(self):
         return self.nombre
@@ -151,7 +140,7 @@ class PostEtiqueta(models.Model):
     etiqueta = models.ForeignKey(Etiqueta, on_delete=models.CASCADE)
 
     class Meta:
-        db_table = 'vi_postetiqueta'
+        db_table = 'vi_postetiqueta'  # Prefijo 'vi_' para la tabla
 
     def __str__(self):
         return f"Etiqueta: {self.etiqueta.nombre} en Post: {self.post.contenido[:30]}"

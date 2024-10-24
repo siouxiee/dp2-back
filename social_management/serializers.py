@@ -3,11 +3,6 @@ from .models import CuentaRedSocial
 from .models import Post
 from .models import RedSocial
 
-class RedSocialSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RedSocial
-        fields = '__all__'
-
 class CuentaRedSocialSerializer(serializers.ModelSerializer):
     class Meta:
         model = CuentaRedSocial
