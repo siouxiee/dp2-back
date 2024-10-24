@@ -93,10 +93,10 @@ CORS_ALLOW_ALL_ORIGINS = True
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'siouxie',
+        'NAME': 'villaizan',
         'USER': 'postgres',
-        'PASSWORD': 'Villaizan$',
-        'HOST': 'pruebas-2c.cybvloot89zv.us-east-1.rds.amazonaws.com',  # o la IP de tu servidor de PostgreSQL
+        'PASSWORD': 'S2vwLU8uJMf',
+		'HOST': 'ecommerce-db.cy6fsvtblkt9.us-east-1.rds.amazonaws.com',
         'PORT': '5432',
     }
 }
