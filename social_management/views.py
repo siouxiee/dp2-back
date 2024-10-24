@@ -1,15 +1,16 @@
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.views import APIView
-from .models import CuentaRedSocial, Post
-from .serializers import CuentaRedSocialSerializer, PostSerializer
+from .models import CuentaRedSocial, Post, RedSocial
+from .serializers import CuentaRedSocialSerializer, PostSerializer, RedSocialSerializer
 from .services import publicar_video_tiktok
 import boto3
 from botocore.exceptions import NoCredentialsError
-from rest_framework import viewsets
 from smmproject import settings
+from django.db.models import Q
+from django.http import Http404 
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
@@ -47,8 +48,20 @@ class UploadVideoToS3View(APIView):
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+@api_view(['POST'])
+def crear_red_social(request):
+    serializer = RedSocialSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# Vista para crear y guardar una nueva cuenta de red social
+@api_view(['GET'])
+def listar_redes_sociales(request):
+    redes = RedSocial.objects.all()
+    serializer = RedSocialSerializer(redes, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 @api_view(['POST'])
 def crear_cuenta_red_social(request):
     serializer = CuentaRedSocialSerializer(data=request.data)
@@ -58,7 +71,6 @@ def crear_cuenta_red_social(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# Vista para consultar las credenciales de una cuenta de red social
 @api_view(['GET'])
 def obtener_cuentas_red_social(request):
     cuentas = CuentaRedSocial.objects.all()
@@ -78,23 +90,77 @@ def eliminar_token(request, pk):
 
 
 @api_view(['GET'])
-def obtener_posts_programados(request):
-    # Filtra los posts programados
-    posts_programados = Post.objects.filter(estado='P')
-    # Serializa los datos
-    serializer = PostSerializer(posts_programados, many=True)
-    return Response(serializer.data)
+def obtener_posts(request):
+    offset = int(request.GET.get('offset', 0))
+    limit = int(request.GET.get('limit', 10))
+    red_social = request.GET.get('redSocial')
+    tipo_publicacion = request.GET.get('tipoPublicacion')
+    estado = request.GET.get('estado')
+    tags = request.GET.getlist('tags')
 
+    filtros = Q()
+    
+    if red_social:
+        filtros &= Q(red_social=red_social)
+    
+    if tipo_publicacion:
+        filtros &= Q(tipo=tipo_publicacion)
+    
+    if estado:
+        filtros &= Q(estado=estado)
+    
+    if tags:
+        filtros &= Q(postetiqueta__etiqueta__nombre__in=tags)
+
+    posts = Post.objects.filter(filtros).distinct().order_by('fecha_creacion')[offset:offset + limit]
+
+    serializer = PostSerializer(posts, many=True)
+    
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def obtener_post_por_id(request, postId):
+    try:
+        post = Post.objects.get(id=postId)
+    except Post.DoesNotExist:
+        raise Http404("El post no existe.")
+    
+    serializer = PostSerializer(post)
+    return Response(serializer.data)
 
 @api_view(['POST'])
 def crear_post(request):
-    if request.method == 'POST':
-        serializer = PostSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    data = request.data
+    serializer = PostSerializer(data=data)
+    
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['PUT'])
+def actualizar_post(request, postId):
+    try:
+        post = Post.objects.get(id=postId)
+    except Post.DoesNotExist:
+        return Response({"error": "Post no encontrado"}, status=status.HTTP_404_NOT_FOUND)
+    
+    serializer = PostSerializer(post, data=request.data)
+    
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def obtener_posts_programados(request):
+    # Filtra los posts programados
+    posts_programados = Post.objects.filter(is_programmed=True)
+    # Serializa los datos
+    serializer = PostSerializer(posts_programados, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def publicar_video(request):
