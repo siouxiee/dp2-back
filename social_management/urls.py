@@ -1,9 +1,8 @@
-# social_management/urls.py
 from django.urls import path, include
 from . import views
 from .views import UploadVideoToS3View, publicar_video
-from rest_framework.routers import DefaultRouter
 from .views import PostViewSet, obtener_post_por_id, crear_post, actualizar_post
+from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register(r'posts', PostViewSet)

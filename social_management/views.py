@@ -1,4 +1,4 @@
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -8,7 +8,6 @@ from .serializers import CuentaRedSocialSerializer, PostSerializer, RedSocialSer
 from .services import publicar_video_tiktok
 import boto3
 from botocore.exceptions import NoCredentialsError
-from rest_framework import viewsets
 from smmproject import settings
 from django.db.models import Q
 from django.http import Http404 
