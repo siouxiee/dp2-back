@@ -56,6 +56,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     #'django.middleware.csrf.CsrfViewMiddleware',
@@ -63,7 +64,6 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',  # Agregar este middleware
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'smmproject.urls'
@@ -85,8 +85,28 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'smmproject.wsgi.application'
+#CORS_ALLOWED_ORIGINS = [
+#    "https://villaizan-social.onrender.com/",
+#    "http://127.0.0.1:8000/",
+#]
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'Accept-Encoding',
+    'Authorization',
+    'Content-Type',
+    'dnt',
+    'Content-Length',
+    'origin',
+    'user-agent',
+    'X-CSRF-Token',
+    'x-requested-with',
+    'Access-Control-Allow-Origin'
+]
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
