@@ -50,3 +50,5 @@ Dockerfile
 *.pot
 *.mo
 .env
+/customer_analytics/__pycache__
+smmproject/settings.py

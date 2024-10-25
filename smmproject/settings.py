@@ -114,13 +114,14 @@ CORS_ALLOW_HEADERS = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'villaizan',
+        'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD': 'S2vwLU8uJMf',
-		'HOST': 'ecommerce-db.cy6fsvtblkt9.us-east-1.rds.amazonaws.com',
+        'PASSWORD': 'admin',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
+
 
 
 # Password validation
@@ -202,15 +203,15 @@ env = environ.Env()
 environ.Env.read_env()  # Lee el archivo .env
 
 # Configuración de AWS S3
-AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
-AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME')
-AWS_S3_SIGNATURE_NAME = env('AWS_S3_SIGNATURE_NAME')
-AWS_S3_FILE_OVERWRITE = False
-AWS_DEFAULT_ACL = None
-AWS_S3_VERIFY = True
-AWS_QUERYSTRING_AUTH = False
+#AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+#AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+#AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
+#AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME')
+#AWS_S3_SIGNATURE_NAME = env('AWS_S3_SIGNATURE_NAME')
+#AWS_S3_FILE_OVERWRITE = False
+#AWS_DEFAULT_ACL = None
+#AWS_S3_VERIFY = True
+#AWS_QUERYSTRING_AUTH = False
 # Configuración de almacenamiento de medios
 #MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
 #DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
