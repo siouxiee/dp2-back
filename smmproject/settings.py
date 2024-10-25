@@ -85,27 +85,28 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'smmproject.wsgi.application'
-CORS_ALLOWED_ORIGINS = [
-    "https://villaizan-social.onrender.com/",
-    "http://127.0.0.1:8000/",
-]
+#CORS_ALLOWED_ORIGINS = [
+#    "https://villaizan-social.onrender.com/",
+#    "http://127.0.0.1:8000/",
+#]
 
-#CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOW_HEADERS = [
     'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
+    'Accept-Encoding',
+    'Authorization',
+    'Content-Type',
     'dnt',
+    'Content-Length',
     'origin',
     'user-agent',
-    'x-csrftoken',
+    'X-CSRF-Token',
     'x-requested-with',
+    'Access-Control-Allow-Origin'
 ]
-
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
