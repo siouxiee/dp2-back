@@ -7,8 +7,7 @@ from .models import Question,Response as ResponseModel, Encuesta, Answer
 from .serializers import QuestionSerializer,ResponseSerializer, EncuestaSerializer, AnswerSerializer
 from django.views.decorators.csrf import csrf_exempt
 
-@csrf_exempt
-@api_view(['POST'])
+@api_view(['POST','GET'])
 def crear_encuesta(request):
     # Usar el serializer para validar y crear la encuesta
     serializer = EncuestaSerializer(data=request.data)
