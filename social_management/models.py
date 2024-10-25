@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 
 # Create your models here.
 
@@ -45,49 +46,46 @@ class ReporteRedes(models.Model):
 
 
 class Post(models.Model):
-    cuenta = models.ForeignKey(CuentaRedSocial, on_delete=models.CASCADE, related_name='posts')
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  # ID como UUID
+    cuenta = models.ForeignKey(
+        'CuentaRedSocial',
+        on_delete=models.CASCADE,
+        related_name='posts',
+        null=True,  # Permitir nulo para borradores
+        blank=True
+    )
     contenido = models.TextField()
-    #imagen_url = models.URLField(null=True, blank=True)
-    #video_url = models.URLField(null=True, blank=True)
-    link = models.URLField(null=True, blank=True)
-    preview = models.URLField(null=True, blank=True)
-    media = models.FileField(upload_to= 'posts',null=True, blank=True)
+    link = models.URLField(null=True, blank=True)  # URL del post
+    preview = models.URLField(null=True, blank=True)  # Thumbnail del contenido
+    media = models.URLField(null=True, blank=True)  # URL del contenido multimedia
 
-    fecha_publicacion = models.DateField(null=True, blank=True)
-    #No mostrar
-    fecha_creacion = models.DateField(auto_now_add=True)
-    fecha_modificacion = models.DateField(auto_now=True)
-    
-    #usuario_creacion = models.IntegerField()
-    #usuario_modificacion = models.IntegerField()
-    
-    is_programmed = models.BooleanField(default=False)
-    programmed_post_time = models.DateTimeField(null=True, blank=True)
-    
+    fecha_publicacion = models.DateField(null=True, blank=True)  # Fecha de publicación
+    fecha_creacion = models.DateField(auto_now_add=True)  # Fecha de creación
+    programmed_post_time = models.DateTimeField(null=True, blank=True)  # Fecha programada para publicación
+
     ESTADO_CHOICES = [
+        ('B', 'Borrador'),
         ('P', 'Programado'),
         ('Pu', 'Publicado'),
         ('F', 'Fallido'),
-        ('B', 'Borrador'),
     ]
-    estado = models.CharField(max_length=2, choices=ESTADO_CHOICES)
+    estado = models.CharField(max_length=2, choices=ESTADO_CHOICES)  # Estado del post
+
     RED_CHOICES = [
         ('TikTok', 'TikTok'),
         ('Facebook', 'Facebook'),
         ('Instagram', 'Instagram'),
     ]
-    red_social = models.CharField(max_length=255, choices=RED_CHOICES, default='Facebook')
+    red_social = models.CharField(max_length=255, choices=RED_CHOICES, blank=True, null=True)  # Red social
 
-    #crea un campo de nombre tipo que sea string 
-    tipo = models.CharField(max_length=255, null=True, blank=True)
-    id_red_social = models.CharField(max_length=255, null=True, blank=True)
-    #is_programmed = models.BooleanField(default=False)  # Agregar este campo
+    tipo = models.CharField(max_length=255, null=True, blank=True)  # Tipo de contenido (video/imagen)
 
     class Meta:
-       db_table = 'vi_post'
+        db_table = 'vi_post'
 
     def __str__(self):
         return self.contenido[:50] if self.contenido else "Post sin contenido"
+
 
 
 class Interaccion(models.Model):
