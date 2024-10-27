@@ -43,6 +43,8 @@ def ventas_por_producto(request, id_producto=None):
     
     return Response(ventas_producto)
 
+
+
 @api_view(['GET'])
 def ventas_totales_fecha(request):
     # Obtener parámetros de fecha de la solicitud
@@ -58,15 +60,18 @@ def ventas_totales_fecha(request):
             return Response({"message": "Formato de fecha no válido. Usar YYYY-MM-DD."}, status=400)
 
         # Filtrar ventas entre las fechas especificadas
-        ventas = Venta.objects.filter(fecha_venta__range=(fecha_inicio, fecha_fin))
+        #ventas = Venta.objects.filter(fecha_venta__range=(fecha_inicio, fecha_fin))
+        ventas = Pedido.objects.filter(creado_en__range=(fecha_inicio, fecha_fin))
     else:
         # Si no se proporcionan fechas, usar todas las ventas
-        ventas = Venta.objects.all()
+        #ventas = Venta.objects.all()
+        ventas = Pedido.objects.all()
 
     if not ventas.exists():
         return Response({"monto_total": 0})
     # Calcular la suma total del monto de las ventas
-    monto_total = ventas.aggregate(Sum('montototal'))['montototal__sum'] or 0
+    #monto_total = ventas.aggregate(Sum('montototal'))['montototal__sum'] or 0
+    monto_total = ventas.aggregate(Sum('total'))['total__sum'] or 0
 
     # Devolver la respuesta con el monto total
     return Response({"monto_total": monto_total})
