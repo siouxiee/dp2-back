@@ -35,5 +35,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('ventas-por-producto/', ventas_por_producto, name='ventas-por-producto'),
     path('ventas-por-producto/<str:id_producto>/', ventas_por_producto, name='ventas-por-producto-detalle'),
-    path('ventas/totales/', ventas_totales_fecha, name='ventas_totales_fecha'),
+    path('ventas-totales/', ventas_totales_fecha, name='ventas_totales_fecha'),
 ]
