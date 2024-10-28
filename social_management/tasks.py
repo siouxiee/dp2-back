@@ -1,11 +1,11 @@
 # social_management/tasks.py
 from celery import shared_task
 from django.utils import timezone
-from .models import Post
 import requests
 
 @shared_task
 def publicar_posts_programados():
+    from .models import Post
     # Obtener la fecha y hora actual
     ahora = timezone.now()
     
