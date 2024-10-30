@@ -20,29 +20,54 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Sum, F
 
+
+
 @api_view(['GET'])
 def ventas_por_producto(request, id_producto=None):
+    # Obtener las fechas de inicio y fin de los parámetros de la solicitud
+    fecha_inicio = request.query_params.get('fecha_inicio')
+    fecha_fin = request.query_params.get('fecha_fin')
+    
+    # Validar y parsear las fechas
+    if fecha_inicio:
+        fecha_inicio = parse_datetime(fecha_inicio)
+    if fecha_fin:
+        fecha_fin = parse_datetime(fecha_fin)
+    
+    # Validar si las fechas son válidas
+    if (fecha_inicio and not fecha_fin) or (fecha_fin and not fecha_inicio):
+        return Response({"message": "Ambas fechas deben estar presentes para el filtro."}, status=400)
+
+    # Filtrar pedidos que tienen estado "entregado"
+    pedidos_entregados = Pedido.objects.filter(estado__iexact="entregado")
+
+    # Filtrar por rango de fechas si ambos valores están presentes
+    if fecha_inicio and fecha_fin:
+        pedidos_entregados = pedidos_entregados.filter(creado_en__range=(fecha_inicio, fecha_fin))
+
+    # Obtener los IDs de los pedidos entregados
+    pedidos_ids = pedidos_entregados.values_list('id', flat=True)
+
+    # Crear el queryset base de DetallePedido filtrando solo por los pedidos entregados
+    queryset = DetallePedido.objects.filter(id_pedido__in=pedidos_ids)
+
+    # Filtrar por id_producto si se proporciona
     if id_producto:
-        # Filtrar por el id del producto si se proporciona
-        ventas_producto = (
-            DetallePedido.objects
-            .filter(id_producto=id_producto)
-            .values('id_producto')
-            .annotate(total_ventas=Sum('subtotal'))
-        )
-        if not ventas_producto:
-            return Response({"message": "No se encontraron ventas para el producto especificado."}, status=404)
-    else:
-        # Obtener las ventas para todos los productos
-        ventas_producto = (
-            DetallePedido.objects
-            .values('id_producto')
-            .annotate(total_ventas=Sum('subtotal'))
-            .order_by('-total_ventas')
-        )
+        queryset = queryset.filter(id_producto=id_producto)
+
+    # Agrupar y sumar ventas
+    ventas_producto = (
+        queryset
+        .values('id_producto')
+        .annotate(total_ventas=Sum('cantidad'))
+        .order_by('-total_ventas')
+    )
+
+    # Manejar caso en el que no haya resultados
+    if not ventas_producto:
+        return Response({"message": "No se encontraron ventas para los criterios especificados."}, status=404)
     
     return Response(ventas_producto)
-
 
 
 @api_view(['GET'])
@@ -75,28 +100,6 @@ def ventas_totales_fecha(request):
 
     # Devolver la respuesta con el monto total
     return Response({"monto_total": monto_total})
-
-"""@api_view(['GET'])
-def ventas_mes(request, fecha_inicio=None,fecha_fin=None):
-    if mes:
-        # Filtrar por el mes si se proporciona
-        ventas_mes = (
-            Pedido.objects
-            .filter(fecha_pedido__month=mes)
-            .values('fecha_pedido')
-            .annotate(total_ventas=Sum('subtotal'))
-        )
-        if not ventas_mes:
-            return Response({"message": "No se encontraron ventas para el mes especificado."}, status=404)
-    else:
-        # Obtener las ventas para todos los meses
-        ventas_mes = (
-            Pedido.objects
-            .values('fecha_pedido')
-            .annotate(total_ventas=Sum('subtotal'))
-            .order_by('-fecha_pedido')
-        )
-    return Response(ventas_mes)"""
 
 class PersonaViewSet(viewsets.ModelViewSet):
     queryset = Persona.objects.all()
