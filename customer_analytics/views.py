@@ -26,25 +26,19 @@ def clientes_con_pedido_entregado(request):
     try:
         # Get IDs of users with at least one "entregado" order
         usuarios_con_entrega = Pedido.objects.filter(estado__iexact="entregado").values_list('id_usuario', flat=True).distinct()
-        
-        # Debugging: Print out the IDs to ensure they're correct
         print("Usuarios con entrega (IDs):", list(usuarios_con_entrega))
         
-        # Filter out non-integer IDs (if any)
-        usuarios_con_entrega = [id for id in usuarios_con_entrega if isinstance(id, int)]
-        
         # Retrieve unique Usuario objects based on those IDs
-        clientes = Usuario.objects.filter(id__in=usuarios_con_entrega).distinct()
-
-        # Serialize the data
-        serializer = UsuarioSerializer(clientes, many=True)
-        return Response(serializer.data)
-
-    except ValueError as e:
+        clientes = Usuario.objects.filter(id__in=usuarios_con_entrega)
+        print("Clientes encontrados:", list(clientes.values('id', 'nombre', 'apellido')))
+        
+        # Convert the queryset to a list of dictionaries
+        clientes_list = list(clientes.values('id', 'nombre', 'apellido', 'correo'))
+        return Response(clientes_list)
+        
+    except Exception as e:
         print(f"Error: {e}")
         return Response({"error": str(e)}, status=400)
-
-
 
 @api_view(['GET'])
 def ventas_por_producto_por_ciudad(request, id_ciudad=None):

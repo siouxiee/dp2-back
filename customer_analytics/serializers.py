@@ -26,10 +26,16 @@ class DireccionSerializer(serializers.ModelSerializer):
         model = Direccion
         fields = '__all__'
 
+#class UsuarioSerializer(serializers.ModelSerializer):
+#    class Meta:
+#        model = Usuario
+#        fields = '__all__'
 class UsuarioSerializer(serializers.ModelSerializer):
+    id = serializers.CharField()  # Ensure this is CharField
+
     class Meta:
         model = Usuario
-        fields = '__all__'
+        fields = ['id', 'nombre', 'apellido', 'correo']
 
 class PermisoSerializer(serializers.ModelSerializer):
     class Meta:
