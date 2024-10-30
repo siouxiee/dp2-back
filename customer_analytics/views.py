@@ -2,6 +2,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import viewsets
 from django.utils.dateparse import parse_datetime
+from django.db.models import Count
+from django.db.models.functions import Coalesce
 from .models import (
     Persona, Rol, Ciudad, Ubicacion, Direccion, Usuario, Permiso,
     Notificacion, TipoProducto, Subcategoria, Fruta, Igv, Producto,
@@ -20,12 +22,90 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Sum, F
 
+@api_view(['GET'])
+def cantidades_frecuentes_compra(request):
+    # Step 1: Filter orders with status "entregado"
+    pedidos_entregados = Pedido.objects.filter(estado__iexact="entregado")
+    
+    # Step 2: Annotate each order with the total number of products in its details
+    cantidades_por_pedido = (
+        pedidos_entregados
+        .annotate(total_productos=Sum('detallepedido__cantidad'))
+    )
+
+    # Step 3: Create a dictionary to count occurrences of each total_productos
+    frecuencias = {}
+    for pedido in cantidades_por_pedido:
+        total_productos = pedido.total_productos
+        if total_productos in frecuencias:
+            frecuencias[total_productos] += 1
+        else:
+            frecuencias[total_productos] = 1
+
+    # Convert to a list format for easier JSON serialization
+    resultado = [{"total_productos": k, "ventas": v} for k, v in frecuencias.items()]
+
+    return Response(resultado)
+
+@api_view(['GET'])
+def frecuencia_compras_por_dia_semana(request):
+    # Get date filters from query parameters
+    fecha_inicio = request.query_params.get('fecha_inicio')
+    fecha_fin = request.query_params.get('fecha_fin')
+
+    # Validate and parse the dates
+    if fecha_inicio:
+        fecha_inicio = parse_datetime(fecha_inicio)
+    if fecha_fin:
+        fecha_fin = parse_datetime(fecha_fin)
+
+    # If one date is provided without the other, return an error
+    if (fecha_inicio and not fecha_fin) or (fecha_fin and not fecha_inicio):
+        return Response({"message": "Both dates must be provided for filtering."}, status=400)
+
+    # Filter "entregado" orders by date range if both dates are present
+    pedidos_entregados = Pedido.objects.filter(estado__iexact="entregado")
+    if fecha_inicio and fecha_fin:
+        pedidos_entregados = pedidos_entregados.filter(creado_en__range=(fecha_inicio, fecha_fin))
+
+    # Retrieve the count of orders grouped by the day of the week
+    frecuencia_por_dia = {i: 0 for i in range(7)}  # Initialize with 0 for each day (0=Monday, 6=Sunday)
+
+    # Iterate through the filtered orders and calculate frequency by day of the week
+    for pedido in pedidos_entregados:
+        day_of_week = pedido.creado_en.weekday()  # Monday=0, Sunday=6
+        frecuencia_por_dia[day_of_week] += 1
+
+    # Map day of the week integers to day names
+    dias_semana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"]
+    resultado = [{"dia": dias_semana[day], "total_pedidos": frecuencia_por_dia[day]} for day in range(7)]
+
+    return Response(resultado)
 
 @api_view(['GET'])
 def clientes_con_pedido_entregado(request):
     try:
-        # Get IDs of users with at least one "entregado" order
-        usuarios_con_entrega = Pedido.objects.filter(estado__iexact="entregado").values_list('id_usuario', flat=True).distinct()
+        # Get date filters from query parameters
+        fecha_inicio = request.query_params.get('fecha_inicio')
+        fecha_fin = request.query_params.get('fecha_fin')
+        
+        # Validate and parse the dates
+        if fecha_inicio:
+            fecha_inicio = parse_datetime(fecha_inicio)
+        if fecha_fin:
+            fecha_fin = parse_datetime(fecha_fin)
+
+        # If one date is provided without the other, return an error
+        if (fecha_inicio and not fecha_fin) or (fecha_fin and not fecha_inicio):
+            return Response({"message": "Both dates must be provided for filtering."}, status=400)
+
+        # Filter "entregado" orders by date range if both dates are present
+        pedidos_entregados = Pedido.objects.filter(estado__iexact="entregado")
+        if fecha_inicio and fecha_fin:
+            pedidos_entregados = pedidos_entregados.filter(creado_en__range=(fecha_inicio, fecha_fin))
+        
+        # Get user IDs from filtered orders
+        usuarios_con_entrega = pedidos_entregados.values_list('id_usuario', flat=True).distinct()
         print("Usuarios con entrega (IDs):", list(usuarios_con_entrega))
         
         # Retrieve unique Usuario objects based on those IDs

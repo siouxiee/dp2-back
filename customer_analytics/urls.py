@@ -9,7 +9,7 @@ from .views import (
     ProductoFrutaViewSet, TipoProductoSubcategoriaViewSet, 
     ProductoSubcategoriaViewSet
 )
-from .views import ventas_por_producto, ventas_totales_fecha,ventas_por_producto_por_ciudad,clientes_con_pedido_entregado
+from .views import ventas_por_producto, ventas_totales_fecha,ventas_por_producto_por_ciudad,clientes_con_pedido_entregado,frecuencia_compras_por_dia_semana
 router = DefaultRouter()
 router.register(r'personas', PersonaViewSet)
 router.register(r'roles', RolViewSet)
@@ -39,4 +39,6 @@ urlpatterns = [
     path('ventas-por-producto-ciudad/', ventas_por_producto_por_ciudad, name='ventas_por_producto_por_ciudad'),
     path('ventas-por-producto-ciudad/<str:id_ciudad>/', ventas_por_producto_por_ciudad, name='ventas_por_producto_por_ciudad_detalle'),
     path('clientes-con-pedido-entregado/', clientes_con_pedido_entregado, name='clientes_con_pedido_entregado'),
+    path('frecuencia-compras-dia-semana/', frecuencia_compras_por_dia_semana, name='frecuencia_compras_dia_semana'),
+    path('cantidades-frecuentes-compra/',views.cantidades_frecuentes_compra, name='cantidades_frecuentes_compra'),
 ]
