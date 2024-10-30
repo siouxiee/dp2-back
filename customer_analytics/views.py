@@ -22,6 +22,32 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Sum, F
 
+
+@api_view(['GET'])
+def cantidad_pedidos_entregados_por_fecha(request):
+    # Obtener los parámetros de fecha
+    fecha_inicio = request.query_params.get('fecha_inicio')
+    fecha_fin = request.query_params.get('fecha_fin')
+
+    # Validar y parsear las fechas
+    if fecha_inicio:
+        fecha_inicio = parse_datetime(fecha_inicio)
+    if fecha_fin:
+        fecha_fin = parse_datetime(fecha_fin)
+    
+    # Validación: ambas fechas deben estar presentes
+    if (fecha_inicio and not fecha_fin) or (fecha_fin and not fecha_inicio):
+        return Response({"message": "Debe proporcionar ambas fechas para el filtro."}, status=400)
+
+    # Filtrar pedidos con estado "entregado" en el rango de fechas y contar
+    cantidad_pedidos = Pedido.objects.filter(
+        estado__iexact="entregado",
+        creado_en__range=(fecha_inicio, fecha_fin)
+    ).count() if fecha_inicio and fecha_fin else Pedido.objects.filter(estado__iexact="entregado").count()
+
+    # Devolver solo la cantidad
+    return Response({"cantidad_pedidos_entregados": cantidad_pedidos})
+
 @api_view(['GET'])
 def cantidades_frecuentes_compra(request):
     # Step 1: Filter orders with status "entregado"

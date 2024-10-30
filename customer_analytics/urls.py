@@ -41,4 +41,5 @@ urlpatterns = [
     path('clientes-con-pedido-entregado/', clientes_con_pedido_entregado, name='clientes_con_pedido_entregado'),
     path('frecuencia-compras-dia-semana/', frecuencia_compras_por_dia_semana, name='frecuencia_compras_dia_semana'),
     path('cantidades-frecuentes-compra/',views.cantidades_frecuentes_compra, name='cantidades_frecuentes_compra'),
+    path('cantidad-pedidos-entregados-por-fecha/', views.cantidad_pedidos_entregados_por_fecha, name='pedidos_entregados_por_fecha'),
 ]
