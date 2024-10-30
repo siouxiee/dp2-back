@@ -21,6 +21,54 @@ from rest_framework.response import Response
 from django.db.models import Sum, F
 
 
+@api_view(['GET'])
+def ventas_por_producto_por_ciudad(request, id_ciudad=None):
+    fecha_inicio = request.query_params.get('fecha_inicio')
+    fecha_fin = request.query_params.get('fecha_fin')
+    # Validar y parsear las fechas
+    if fecha_inicio:
+        fecha_inicio = parse_datetime(fecha_inicio)
+    if fecha_fin:
+        fecha_fin = parse_datetime(fecha_fin)
+
+    if (fecha_inicio and not fecha_fin) or (fecha_fin and not fecha_inicio):
+        return Response({"message": "Ambas fechas deben estar presentes para el filtro."}, status=400)
+    
+
+    if id_ciudad:
+        # Filtrar las direcciones que pertenecen a la ciudad especificada
+        direcciones_en_ciudad = Direccion.objects.filter(id_ciudad=id_ciudad).values_list('id', flat=True)
+        
+        # Filtrar los pedidos que tienen direcciones en la ciudad especificada
+        pedidos_en_ciudad = Pedido.objects.filter(id_direccion__in=direcciones_en_ciudad)
+    else:
+        pedidos_en_ciudad = pedidos_en_ciudad.filter(estado__iexact="entregado")
+    
+    if fecha_inicio and fecha_fin:
+        pedidos_en_ciudad = pedidos_en_ciudad.filter(creado_en__range=(fecha_inicio, fecha_fin))
+    
+    pedidos_ids=pedidos_en_ciudad.values_list('id', flat=True)
+    
+    # Filtrar los detalles de pedido que están asociados a los pedidos filtrados
+    ventas_por_producto = (
+        DetallePedido.objects
+        .filter(id_pedido__in=pedidos_ids)
+        .values('id_producto')
+        .annotate(total_vendido=Sum('cantidad'))
+        .order_by('-total_vendido')
+    )
+
+    # Agregar el nombre del producto a cada entrada
+    resultados = []
+    for venta in ventas_por_producto:
+        producto = Producto.objects.get(id=venta['id_producto'])
+        resultados.append({
+            "producto_id": venta['id_producto'],
+            "producto_nombre": producto.nombre,
+            "total_vendido": venta['total_vendido']
+        })
+
+    return Response(resultados)
 
 @api_view(['GET'])
 def ventas_por_producto(request, id_producto=None):
@@ -87,20 +135,23 @@ def ventas_totales_fecha(request):
 
         # Filtrar ventas entre las fechas especificadas
         #ventas = Venta.objects.filter(fecha_venta__range=(fecha_inicio, fecha_fin))
-        ventas = Pedido.objects.filter(creado_en__range=(fecha_inicio, fecha_fin))
-    else:
+        pedidos_entregados = Pedido.objects.filter(estado__iexact="entregado")
+        pedidos_entregados = pedidos_entregados.filter(creado_en__range=(fecha_inicio, fecha_fin))
+        #else:
         # Si no se proporcionan fechas, usar todas las ventas
         #ventas = Venta.objects.all()
-        ventas = Pedido.objects.all()
+        #ventas = Pedido.objects.all()
 
-    if not ventas.exists():
-        return Response({"monto_total": 0})
-    # Calcular la suma total del monto de las ventas
-    #monto_total = ventas.aggregate(Sum('montototal'))['montototal__sum'] or 0
-    monto_total = ventas.aggregate(Sum('total'))['total__sum'] or 0
+    if fecha_inicio and fecha_fin:
+        if not pedidos_entregados.exists():
+            return Response({"cantidades_totales": 0})
+        else:
+            pedidos_ids = pedidos_entregados.values_list('id', flat=True)
+            queryset = DetallePedido.objects.filter(id_pedido__in=pedidos_ids)
+            cantidad_total = queryset.aggregate(Sum('cantidad'))['cantidad__sum'] or 0
 
     # Devolver la respuesta con el monto total
-    return Response({"monto_total": monto_total})
+    return Response({"cantidades_totales": cantidad_total})
 
 class PersonaViewSet(viewsets.ModelViewSet):
     queryset = Persona.objects.all()
