@@ -69,6 +69,7 @@ def ventas_por_producto(request, id_producto=None):
     
     return Response(ventas_producto)
 
+#final
 
 @api_view(['GET'])
 def ventas_totales_fecha(request):
