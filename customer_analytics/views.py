@@ -22,6 +22,31 @@ from django.db.models import Sum, F
 
 
 @api_view(['GET'])
+def clientes_con_pedido_entregado(request):
+    try:
+        # Get IDs of users with at least one "entregado" order
+        usuarios_con_entrega = Pedido.objects.filter(estado__iexact="entregado").values_list('id_usuario', flat=True).distinct()
+        
+        # Debugging: Print out the IDs to ensure they're correct
+        print("Usuarios con entrega (IDs):", list(usuarios_con_entrega))
+        
+        # Filter out non-integer IDs (if any)
+        usuarios_con_entrega = [id for id in usuarios_con_entrega if isinstance(id, int)]
+        
+        # Retrieve unique Usuario objects based on those IDs
+        clientes = Usuario.objects.filter(id__in=usuarios_con_entrega).distinct()
+
+        # Serialize the data
+        serializer = UsuarioSerializer(clientes, many=True)
+        return Response(serializer.data)
+
+    except ValueError as e:
+        print(f"Error: {e}")
+        return Response({"error": str(e)}, status=400)
+
+
+
+@api_view(['GET'])
 def ventas_por_producto_por_ciudad(request, id_ciudad=None):
     fecha_inicio = request.query_params.get('fecha_inicio')
     fecha_fin = request.query_params.get('fecha_fin')
@@ -40,15 +65,16 @@ def ventas_por_producto_por_ciudad(request, id_ciudad=None):
         direcciones_en_ciudad = Direccion.objects.filter(id_ciudad=id_ciudad).values_list('id', flat=True)
         
         # Filtrar los pedidos que tienen direcciones en la ciudad especificada
-        pedidos_en_ciudad = Pedido.objects.filter(id_direccion__in=direcciones_en_ciudad)
+        pedidos_en_ciudad = Pedido.objects.filter(id_direccion__in=direcciones_en_ciudad, estado__iexact="entregado")
     else:
-        pedidos_en_ciudad = pedidos_en_ciudad.filter(estado__iexact="entregado")
+        pedidos_en_ciudad = Pedido.objects.filter(estado__iexact="entregado")
     
     if fecha_inicio and fecha_fin:
         pedidos_en_ciudad = pedidos_en_ciudad.filter(creado_en__range=(fecha_inicio, fecha_fin))
     
     pedidos_ids=pedidos_en_ciudad.values_list('id', flat=True)
     
+
     # Filtrar los detalles de pedido que están asociados a los pedidos filtrados
     ventas_por_producto = (
         DetallePedido.objects
