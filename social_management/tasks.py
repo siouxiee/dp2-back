@@ -34,3 +34,7 @@ def publicar_posts_programados():
             post.estado = 'F'
             post.save()
             print(f"Error publicando el post {post.id}: {e}")
+
+@shared_task
+def imprimir_mensaje_prueba():
+    print("Probando - Tarea ejecutada exitosamente")
