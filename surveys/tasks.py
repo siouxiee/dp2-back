@@ -18,7 +18,7 @@ def manejar_encuestas_vencidas():
     for encuesta in encuestas_vencidas:
         try:
             # Llamada a la API del frontend para cerrar o eliminar la encuesta
-            response = requests.post("FRONTEND_API_URL", json={'encuesta_id': encuesta.id})
+            response = requests.post("https://helado-villaizan.vercel.app/api/encuestas/desactivar", json={'encuesta_id': encuesta.id})
 
             if response.status_code == 200:
                 # Si la acción fue exitosa, actualiza el estado de la encuesta a "Cerrada"
