@@ -22,6 +22,30 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Sum, F
 
+@api_view(['GET'])
+def cantidad_ciudades_con_ventas(request):
+    fecha_inicio = request.query_params.get('fecha_inicio')
+    fecha_fin = request.query_params.get('fecha_fin')
+
+    # Validar y parsear las fechas
+    if fecha_inicio:
+        fecha_inicio = parse_datetime(fecha_inicio)
+    if fecha_fin:
+        fecha_fin = parse_datetime(fecha_fin)
+
+    if (fecha_inicio and not fecha_fin) or (fecha_fin and not fecha_inicio):
+        return Response({"message": "Ambas fechas deben estar presentes para el filtro."}, status=400)
+
+    # Filtrar los pedidos entregados dentro del rango de fechas
+    pedidos_entregados = Pedido.objects.filter(
+        estado__iexact="entregado",
+        creado_en__date__range=(fecha_inicio, fecha_fin)
+    ).values('id_direccion__id_ciudad').distinct()
+
+    # Contar las ciudades únicas
+    cantidad_ciudades = pedidos_entregados.count()
+
+    return Response({"cantidad_ciudades": cantidad_ciudades})
 
 @api_view(['GET'])
 def cantidad_pedidos_entregados_por_fecha(request):
@@ -50,16 +74,28 @@ def cantidad_pedidos_entregados_por_fecha(request):
 
 @api_view(['GET'])
 def cantidades_frecuentes_compra(request):
-    # Step 1: Filter orders with status "entregado"
-    pedidos_entregados = Pedido.objects.filter(estado__iexact="entregado")
-    
-    # Step 2: Annotate each order with the total number of products in its details
-    cantidades_por_pedido = (
-        pedidos_entregados
-        .annotate(total_productos=Sum('detallepedido__cantidad'))
-    )
+    fecha_inicio = request.query_params.get('fecha_inicio')
+    fecha_fin = request.query_params.get('fecha_fin')
 
-    # Step 3: Create a dictionary to count occurrences of each total_productos
+    # Validar y parsear las fechas
+    if fecha_inicio:
+        fecha_inicio = parse_datetime(fecha_inicio)
+    if fecha_fin:
+        fecha_fin = parse_datetime(fecha_fin)
+
+    if not fecha_inicio or not fecha_fin:
+        return Response({"message": "Ambas fechas deben estar presentes y en formato correcto para el filtro."}, status=400)
+
+    # Filtrar los pedidos entregados dentro del rango de fechas
+    pedidos_entregados = Pedido.objects.filter(
+        estado__iexact="entregado",
+        creado_en__range=(fecha_inicio, fecha_fin)
+    )
+    
+    # Anotar cada pedido con el total de productos en sus detalles
+    cantidades_por_pedido = pedidos_entregados.annotate(total_productos=Sum('detallepedido__cantidad'))
+
+    # Crear un diccionario para contar las ocurrencias de cada total_productos
     frecuencias = {}
     for pedido in cantidades_por_pedido:
         total_productos = pedido.total_productos
@@ -68,7 +104,7 @@ def cantidades_frecuentes_compra(request):
         else:
             frecuencias[total_productos] = 1
 
-    # Convert to a list format for easier JSON serialization
+    # Convertir a formato de lista para una fácil serialización JSON
     resultado = [{"total_productos": k, "ventas": v} for k, v in frecuencias.items()]
 
     return Response(resultado)

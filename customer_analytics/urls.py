@@ -42,4 +42,5 @@ urlpatterns = [
     path('frecuencia-compras-dia-semana/', frecuencia_compras_por_dia_semana, name='frecuencia_compras_dia_semana'),
     path('cantidades-frecuentes-compra/',views.cantidades_frecuentes_compra, name='cantidades_frecuentes_compra'),
     path('cantidad-pedidos-entregados-por-fecha/', views.cantidad_pedidos_entregados_por_fecha, name='pedidos_entregados_por_fecha'),
+    path('cantidad-ciudades-ventas/', views.cantidad_ciudades_con_ventas, name='cantidad_ciudades_ventas'),
 ]
