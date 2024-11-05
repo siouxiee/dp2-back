@@ -114,15 +114,16 @@ CORS_ALLOW_HEADERS = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'HolaMundo2025',
-        'HOST': 'dp2-pruebas-2c.cybvloot89zv.us-east-1.rds.amazonaws.com',
+        'NAME': 'verceldb',  # POSTGRES_DATABASE
+        'USER': 'default',  # POSTGRES_USER
+        'PASSWORD': 'bOoyAur5eNa1',  # POSTGRES_PASSWORD
+        'HOST': 'ep-cold-hill-a4n65zi1-pooler.us-east-1.aws.neon.tech',  # POSTGRES_HOST
         'PORT': '5432',
+        'OPTIONS': {
+            'sslmode': 'require',  # Esto se agrega para cumplir con el requerimiento SSL
+        }
     }
 }
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
