@@ -8,7 +8,7 @@ def publicar_posts_programados():
     from .models import Post
     # Obtener la fecha y hora actual
     ahora = timezone.now()
-    
+
     # Filtrar los posts programados para la fecha y hora actuales
     posts_para_publicar = Post.objects.filter(
         estado='P',  # Estado Programado
@@ -17,8 +17,20 @@ def publicar_posts_programados():
 
     for post in posts_para_publicar:
         try:
+            # Preparar los datos para la API
+            post_data = {
+                "id": str(post.id),  # Convertir UUID a string
+                "social_media": [post.red_social.lower()],  # Convertir a minúsculas para el API
+                "type": post.tipo.lower() if post.tipo else "video",  # Usar tipo si está definido, por defecto 'video'
+                "status": "publicado",
+                "thumbnail": post.preview,  # Usar la URL del preview si está disponible
+                "media": [post.media],  # Usar URL del contenido multimedia
+                "content": post.contenido,  # Contenido del post
+                "post_time": post.programmed_post_time.isoformat()  # Convertir a ISO formato
+            }
+
             # Llamada a la API del frontend para publicar el post
-            response = requests.post("FRONTEND_API_URL", json={'contenido': post.contenido})
+            response = requests.post("https://helado-villaizan.vercel.app/api/facebook/post", json=post_data)
 
             if response.status_code == 200:
                 # Si la publicación fue exitosa, actualizar el estado del post a 'Publicado'
@@ -29,6 +41,7 @@ def publicar_posts_programados():
                 # Si falla, actualizar el estado del post a 'Fallido'
                 post.estado = 'F'
                 post.save()
+                print(f"Error publicando el post {post.id}: {response.status_code} - {response.text}")
         except Exception as e:
             # Si hay algún error, marcar el post como 'Fallido'
             post.estado = 'F'
