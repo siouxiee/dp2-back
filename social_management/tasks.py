@@ -49,5 +49,21 @@ def publicar_posts_programados():
             print(f"Error publicando el post {post.id}: {e}")
 
 @shared_task
+def renovar_tokens_facebook_instagram():
+    try:
+        # Llamada a la API para renovar los tokens de Facebook e Instagram
+        response = requests.post("https://helado-villaizan.vercel.app/api/meta/token-renew")
+
+        if response.status_code == 200:
+            # Si la renovación fue exitosa
+            print("Tokens renovados exitosamente.")
+        else:
+            # Si hubo un problema con la renovación
+            print(f"Error al renovar los tokens: {response.status_code} - {response.text}")
+    except Exception as e:
+        # Si ocurre algún error durante la solicitud
+        print(f"Error al intentar renovar los tokens: {e}")
+
+@shared_task
 def imprimir_mensaje_prueba():
     print("Probando - Tarea ejecutada exitosamente")
