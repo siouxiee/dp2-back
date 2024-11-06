@@ -2,17 +2,23 @@
 from celery import shared_task
 from django.utils import timezone
 import requests
+import pytz
 
 @shared_task
 def publicar_posts_programados():
     from .models import Post
-    # Obtener la fecha y hora actual
-    ahora = timezone.now()
+    # Obtener la fecha y hora actual en America/Lima
+    lima = pytz.timezone('America/Lima')
+    ahora = timezone.now().astimezone(lima)
 
-    # Filtrar los posts programados para la fecha y hora actuales
+    # Convertir a GMT para comparar con los valores almacenados en la base de datos (que están en GMT)
+    gmt = pytz.timezone('GMT')
+    ahora_gmt = ahora.astimezone(gmt)
+
+    # Filtrar los posts programados para la fecha y hora actuales en GMT
     posts_para_publicar = Post.objects.filter(
         estado='P',  # Estado Programado
-        programmed_post_time__lte=ahora  # Fecha/hora programada para publicar
+        programmed_post_time__lte=ahora_gmt  # Fecha/hora programada para publicar
     )
 
     for post in posts_para_publicar:
