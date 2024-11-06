@@ -2,13 +2,16 @@
 from celery import shared_task
 from django.utils import timezone
 import requests
+import pytz
 
 @shared_task
 def manejar_encuestas_vencidas():
     from .models import Encuesta
-    # Obtener la fecha actual
-    ahora = timezone.now().date()
-    
+
+    # Obtener la fecha y hora actual en America/Lima
+    lima = pytz.timezone('America/Lima')
+    ahora = timezone.now().astimezone(lima).date()  # Convertir a fecha en Lima
+
     # Filtrar las encuestas cuya fecha de finalización ha pasado y que aún están activas
     encuestas_vencidas = Encuesta.objects.filter(
         end_date__lt=ahora,  # Fecha de finalización menor a la fecha actual
