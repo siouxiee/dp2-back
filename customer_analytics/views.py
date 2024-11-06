@@ -186,6 +186,7 @@ def clientes_con_pedido_entregado(request):
 def ventas_por_producto_por_ciudad(request, id_ciudad=None):
     fecha_inicio = request.query_params.get('fecha_inicio')
     fecha_fin = request.query_params.get('fecha_fin')
+
     # Validar y parsear las fechas
     if fecha_inicio:
         fecha_inicio = parse_datetime(fecha_inicio)
@@ -194,8 +195,8 @@ def ventas_por_producto_por_ciudad(request, id_ciudad=None):
 
     if (fecha_inicio and not fecha_fin) or (fecha_fin and not fecha_inicio):
         return Response({"message": "Ambas fechas deben estar presentes para el filtro."}, status=400)
-    
 
+    # Filtrar pedidos según la ciudad (si se especifica) y el estado "entregado"
     if id_ciudad:
         # Filtrar las direcciones que pertenecen a la ciudad especificada
         direcciones_en_ciudad = Direccion.objects.filter(id_ciudad=id_ciudad).values_list('id', flat=True)
@@ -205,32 +206,46 @@ def ventas_por_producto_por_ciudad(request, id_ciudad=None):
     else:
         pedidos_en_ciudad = Pedido.objects.filter(estado__iexact="entregado")
     
+    # Aplicar el filtro de fechas si está presente
     if fecha_inicio and fecha_fin:
         pedidos_en_ciudad = pedidos_en_ciudad.filter(creado_en__range=(fecha_inicio, fecha_fin))
     
-    pedidos_ids=pedidos_en_ciudad.values_list('id', flat=True)
-    
+    # Obtener los IDs de los pedidos
+    pedidos_ids = pedidos_en_ciudad.values_list('id', flat=True)
 
-    # Filtrar los detalles de pedido que están asociados a los pedidos filtrados
+    # Filtrar los detalles de pedido y agrupar por producto y ciudad
     ventas_por_producto = (
         DetallePedido.objects
         .filter(id_pedido__in=pedidos_ids)
-        .values('id_producto')
+        .values('id_producto', 'id_pedido__id_direccion__id_ciudad')
         .annotate(total_vendido=Sum('cantidad'))
-        .order_by('-total_vendido')
+        .order_by('id_pedido__id_direccion__id_ciudad', '-total_vendido')
     )
 
-    # Agregar el nombre del producto a cada entrada
-    resultados = []
+    # Organizar resultados por ciudad
+    resultados = {}
     for venta in ventas_por_producto:
-        producto = Producto.objects.get(id=venta['id_producto'])
-        resultados.append({
-            "producto_id": venta['id_producto'],
+        ciudad_id = venta['id_pedido__id_direccion__id_ciudad']
+        producto_id = venta['id_producto']
+        total_vendido = venta['total_vendido']
+        
+        # Obtener el nombre del producto
+        producto = Producto.objects.get(id=producto_id)
+        
+        # Estructurar resultados por ciudad
+        if ciudad_id not in resultados:
+            resultados[ciudad_id] = []
+        
+        resultados[ciudad_id].append({
+            "producto_id": producto_id,
             "producto_nombre": producto.nombre,
-            "total_vendido": venta['total_vendido']
+            "total_vendido": total_vendido
         })
 
-    return Response(resultados)
+    # Convertir el diccionario de resultados a una lista
+    respuesta = [{"ciudad_id": ciudad, "ventas": productos} for ciudad, productos in resultados.items()]
+
+    return Response(respuesta)
 
 @api_view(['GET'])
 def ventas_por_producto(request, id_producto=None):
