@@ -34,12 +34,12 @@ def publicar_posts_programados():
         )
         cursor = conn.cursor()
 
-        # Consulta para obtener los posts programados excluyendo Facebook
+        # Consulta para obtener los posts programados
         query = """
         SELECT posts.id, posts.type, posts.status, posts.thumbnail, posts.content, posts.post_time, social_media.platform
         FROM posts
         JOIN social_media ON posts.id = social_media.post_id
-        WHERE posts.status = 'programado' AND posts.post_time <= %s AND social_media.platform NOT IN ('facebook');
+        WHERE posts.status = 'programado' AND posts.post_time <= %s;
         """
         cursor.execute(query, (ahora_gmt,))
         posts_para_publicar = cursor.fetchall()
@@ -55,26 +55,17 @@ def publicar_posts_programados():
                 # Verificar si la hora actual en GMT es igual o posterior a la hora programada
                 if ahora_gmt >= post_time_gmt:
                     try:
-                        # Preparar los datos para la API
-                        if platform.lower() == 'tiktok':
-                            post_data = {
-                                "id": str(post_id),
-                                "social_media": [platform.lower()],
-                                "type": post_type.lower() if post_type else "video",
-                                "status": "publicado",
-                                "content": content
-                            }
-                        else:
-                            post_data = {
-                                "id": str(post_id),
-                                "social_media": [platform.lower()],
-                                "type": post_type.lower() if post_type else "video",
-                                "status": "publicado",
-                                "thumbnail": thumbnail,
-                                "media": [thumbnail],  # Usar el mismo URL como placeholder de media
-                                "content": content,
-                                "post_time": post_time.isoformat()
-                            }
+                        # Preparar los datos para la API (incluyendo todos los parámetros)
+                        post_data = {
+                            "id": str(post_id),
+                            "social_media": [platform.lower()],
+                            "type": post_type.lower() if post_type else "video",
+                            "status": "publicado",
+                            "thumbnail": thumbnail,
+                            "media": [thumbnail],  # Usar el mismo URL como placeholder de media
+                            "content": content,
+                            "post_time": post_time.isoformat()
+                        }
 
                         # Determinar la URL de la API en función de la plataforma
                         api_url = f"https://helado-villaizan.vercel.app/api/{platform.lower()}/post"
@@ -108,6 +99,7 @@ def publicar_posts_programados():
 
     except Exception as e:
         print(f"Error al conectar o consultar la base de datos: {e}")
+
 
 
 
