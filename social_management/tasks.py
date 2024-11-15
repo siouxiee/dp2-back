@@ -33,12 +33,12 @@ def publicar_posts_programados():
         )
         cursor = conn.cursor()
 
-        # Consulta para obtener los posts programados
+        # Consulta para obtener los posts programados excluyendo Facebook
         query = """
         SELECT posts.id, posts.type, posts.status, posts.thumbnail, posts.content, posts.post_time, social_media.platform
         FROM posts
         JOIN social_media ON posts.id = social_media.post_id
-        WHERE posts.status = 'programado' AND posts.post_time <= %s;
+        WHERE posts.status = 'programado' AND posts.post_time <= %s AND social_media.platform NOT IN ('facebook');
         """
         cursor.execute(query, (ahora_gmt,))
         posts_para_publicar = cursor.fetchall()
@@ -97,7 +97,6 @@ def publicar_posts_programados():
 
     except Exception as e:
         print(f"Error al conectar o consultar la base de datos: {e}")
-
 
 
 # @shared_task
