@@ -4,6 +4,7 @@ from django.utils import timezone
 import psycopg2
 import pytz
 import requests
+from datetime import datetime
 
 # Configuración de la conexión a la base de datos
 DB_HOST = 'ep-cold-hill-a4n65zi1-pooler.us-east-1.aws.neon.tech'
@@ -44,41 +45,59 @@ def publicar_posts_programados():
         posts_para_publicar = cursor.fetchall()
 
         if posts_para_publicar:
+            print(f"Se encontraron {len(posts_para_publicar)} posts programados para publicar.")
             for post in posts_para_publicar:
                 post_id, post_type, status, thumbnail, content, post_time, platform = post
-                try:
-                    # Preparar los datos para la API
-                    post_data = {
-                        "id": str(post_id),
-                        "social_media": [platform.lower()],
-                        "type": post_type.lower() if post_type else "video",
-                        "status": "publicado",
-                        "thumbnail": thumbnail,
-                        "media": [thumbnail],  # Usar el mismo URL como placeholder de media
-                        "content": content,
-                        "post_time": post_time.isoformat()
-                    }
 
-                    # Determinar la URL de la API en función de la plataforma
-                    api_url = f"https://helado-villaizan.vercel.app/api/{platform.lower()}/post"
+                # Convertir la fecha de la base de datos a GMT para asegurar la comparación
+                post_time_gmt = post_time.astimezone(gmt)
 
-                    # Llamada a la API del frontend para publicar el post
-                    response = requests.post(api_url, json=post_data)
+                # Verificar si la hora actual en GMT es igual o posterior a la hora programada
+                if ahora_gmt >= post_time_gmt:
+                    try:
+                        # Preparar los datos para la API
+                        if platform.lower() == 'tiktok':
+                            post_data = {
+                                "id": str(post_id),
+                                "social_media": [platform.lower()],
+                                "type": post_type.lower() if post_type else "video",
+                                "status": "publicado",
+                                "content": content
+                            }
+                        else:
+                            post_data = {
+                                "id": str(post_id),
+                                "social_media": [platform.lower()],
+                                "type": post_type.lower() if post_type else "video",
+                                "status": "publicado",
+                                "thumbnail": thumbnail,
+                                "media": [thumbnail],  # Usar el mismo URL como placeholder de media
+                                "content": content,
+                                "post_time": post_time.isoformat()
+                            }
 
-                    if response.status_code == 200:
-                        print(f"Post {post_id} publicado exitosamente en {platform}.")
+                        # Determinar la URL de la API en función de la plataforma
+                        api_url = f"https://helado-villaizan.vercel.app/api/{platform.lower()}/post"
 
-                        # Actualizar el estado del post a 'publicado'
-                        update_query = "UPDATE posts SET status = 'publicado' WHERE id = %s;"
-                        cursor.execute(update_query, (post_id,))
-                        conn.commit()  # Confirmar los cambios en la base de datos
-                    else:
-                        print(f"Error publicando el post {post_id} en {platform}: {response.status_code} - {response.text}")
+                        # Llamada a la API del frontend para publicar el post
+                        response = requests.post(api_url, json=post_data)
+
+                        if response.status_code == 200:
+                            print(f"Post {post_id} publicado exitosamente en {platform}.")
+
+                            # Actualizar el estado del post a 'publicado'
+                            update_query = "UPDATE posts SET status = 'publicado' WHERE id = %s;"
+                            cursor.execute(update_query, (post_id,))
+                            conn.commit()  # Confirmar los cambios en la base de datos
+                        else:
+                            print(f"Error publicando el post {post_id} en {platform}: {response.status_code} - {response.text}")
+                            # No cambiar el estado a 'fallido', mantenerlo como 'programado'
+
+                    except Exception as e:
+                        print(f"Error publicando el post {post_id}: {e}")
                         # No cambiar el estado a 'fallido', mantenerlo como 'programado'
-
-                except Exception as e:
-                    print(f"Error publicando el post {post_id}: {e}")
-                    # No cambiar el estado a 'fallido', mantenerlo como 'programado'
+                else:
+                    print(f"El post {post_id} está programado para una hora futura y no será publicado todavía.")
 
         else:
             print("No hay posts programados para publicar.")
@@ -89,6 +108,7 @@ def publicar_posts_programados():
 
     except Exception as e:
         print(f"Error al conectar o consultar la base de datos: {e}")
+
 
 
 # @shared_task
