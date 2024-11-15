@@ -74,19 +74,11 @@ def publicar_posts_programados():
                         conn.commit()  # Confirmar los cambios en la base de datos
                     else:
                         print(f"Error publicando el post {post_id} en {platform}: {response.status_code} - {response.text}")
-
-                        # Actualizar el estado del post a 'fallido'
-                        update_query = "UPDATE posts SET status = 'fallido' WHERE id = %s;"
-                        cursor.execute(update_query, (post_id,))
-                        conn.commit()
+                        # No cambiar el estado a 'fallido', mantenerlo como 'programado'
 
                 except Exception as e:
                     print(f"Error publicando el post {post_id}: {e}")
-
-                    # Actualizar el estado del post a 'fallido'
-                    update_query = "UPDATE posts SET status = 'fallido' WHERE id = %s;"
-                    cursor.execute(update_query, (post_id,))
-                    conn.commit()
+                    # No cambiar el estado a 'fallido', mantenerlo como 'programado'
 
         else:
             print("No hay posts programados para publicar.")
