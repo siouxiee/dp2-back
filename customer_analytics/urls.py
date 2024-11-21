@@ -7,9 +7,9 @@ from .views import (
     TipoProductoViewSet, SubcategoriaViewSet, FrutaViewSet, IgvViewSet, 
     ProductoViewSet, PedidoViewSet, VentaViewSet, DetallePedidoViewSet, 
     ProductoFrutaViewSet, TipoProductoSubcategoriaViewSet, 
-    ProductoSubcategoriaViewSet
+    ProductoSubcategoriaViewSet,PromocionViewSet
 )
-from .views import ventas_por_producto, ventas_totales_fecha,ventas_por_producto_por_ciudad,clientes_con_pedido_entregado,frecuencia_compras_por_dia_semana
+from .views import ventas_por_producto, ventas_totales_fecha,ventas_por_producto_por_ciudad,clientes_con_pedido_entregado,frecuencia_compras_por_dia_semana,ventas_por_promocion,cantidad_pedidos_cancelados
 router = DefaultRouter()
 router.register(r'personas', PersonaViewSet)
 router.register(r'roles', RolViewSet)
@@ -30,6 +30,7 @@ router.register(r'detalles-pedido', DetallePedidoViewSet)
 router.register(r'producto-frutas', ProductoFrutaViewSet)
 router.register(r'tipo-producto-subcategorias', TipoProductoSubcategoriaViewSet)
 router.register(r'producto-subcategorias', ProductoSubcategoriaViewSet)
+router.register(r'promociones', PromocionViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
@@ -43,4 +44,7 @@ urlpatterns = [
     path('cantidades-frecuentes-compra/',views.cantidades_frecuentes_compra, name='cantidades_frecuentes_compra'),
     path('cantidad-pedidos-entregados-por-fecha/', views.cantidad_pedidos_entregados_por_fecha, name='pedidos_entregados_por_fecha'),
     path('cantidad-ciudades-ventas/', views.cantidad_ciudades_con_ventas, name='cantidad_ciudades_ventas'),
+    path('ventas-por-promocion/', views.ventas_por_promocion, name='ventas_por_promocion'),
+    path('ventas-por-promocion/<str:id_promocion>/', ventas_por_promocion, name='ventas_por_promocion'),
+    path('cantidad-pedidos-cancelados/', cantidad_pedidos_cancelados, name='cantidad_pedidos_cancelados'),
 ]

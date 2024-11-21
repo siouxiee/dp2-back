@@ -252,6 +252,11 @@ class Producto(models.Model):
     def __str__(self):
         return self.nombre
 
+class Promocion(models.Model):
+    id = models.CharField(max_length=50, primary_key=True, db_column='id')
+    titulo = models.CharField(max_length=50, db_column='titulo')
+    descripcion = models.CharField(max_length=255, db_column='descripcion')
+
 class Pedido(models.Model):
     id = models.CharField(max_length=50, primary_key=True, db_column='id')    
     estado = models.CharField(max_length=50, db_column='estado')
@@ -317,7 +322,7 @@ class DetallePedido(models.Model):
     actualizado_en = models.DateTimeField(auto_now=True, db_column='actualizadoen')
     usuario_creacion = models.CharField(max_length=50, db_column='usuariocreacion')
     usuario_actualizacion = models.CharField(max_length=50, db_column='usuarioactualizacion')
-
+    id_promocion = models.CharField(max_length=50, null=True, blank=True, db_column='id_promocion')  # Not using ForeignKey directly
     class Meta:
         db_table = 'vi_detallepedido'
 
@@ -373,3 +378,4 @@ class ProductoSubcategoria(models.Model):
 
     def __str__(self):
         return f"Producto {self.id_producto_id} - Subcategoria {self.id_subcategoria_id}"
+

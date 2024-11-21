@@ -8,7 +8,7 @@ from .models import (
     Persona, Rol, Ciudad, Ubicacion, Direccion, Usuario, Permiso,
     Notificacion, TipoProducto, Subcategoria, Fruta, Igv, Producto,
     Pedido, Venta, DetallePedido, ProductoFruta, TipoProductoSubcategoria,
-    ProductoSubcategoria
+    ProductoSubcategoria,Promocion
 )
 from .serializers import (
     PersonaSerializer, RolSerializer, CiudadSerializer, UbicacionSerializer, 
@@ -16,11 +16,84 @@ from .serializers import (
     NotificacionSerializer, TipoProductoSerializer, SubcategoriaSerializer, 
     FrutaSerializer, IgvSerializer, ProductoSerializer, PedidoSerializer, 
     VentaSerializer, DetallePedidoSerializer, ProductoFrutaSerializer, 
-    TipoProductoSubcategoriaSerializer, ProductoSubcategoriaSerializer
+    TipoProductoSubcategoriaSerializer, ProductoSubcategoriaSerializer,PromocionSerializer
 )
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Sum, F
+
+
+@api_view(['GET'])
+def cantidad_pedidos_cancelados(request):
+    fecha_inicio = request.query_params.get('fecha_inicio')
+    fecha_fin = request.query_params.get('fecha_fin')
+
+    # Validar y parsear las fechas
+    if fecha_inicio:
+        fecha_inicio = parse_datetime(fecha_inicio)
+    if fecha_fin:
+        fecha_fin = parse_datetime(fecha_fin)
+
+    if not fecha_inicio or not fecha_fin:
+        return Response({"message": "Ambas fechas deben estar presentes y en formato correcto para el filtro."}, status=400)
+
+
+    pedidos_cancelados = Pedido.objects.filter(estado__iexact="cancelado")
+    
+    if fecha_inicio and fecha_fin:
+        pedidos_cancelados = pedidos_cancelados.filter(creado_en__range=(fecha_inicio, fecha_fin))
+
+    # Contar la cantidad de pedidos cancelados
+    cantidad_pedidos = pedidos_cancelados.count()
+
+    return Response({"cantidad_pedidos_cancelados": cantidad_pedidos})
+
+@api_view(['GET'])
+def ventas_por_promocion(request, id_promocion=None):
+    # Obtener las fechas de inicio y fin de los parámetros de la solicitud
+    fecha_inicio = request.query_params.get('fecha_inicio')
+    fecha_fin = request.query_params.get('fecha_fin')
+    
+    # Validar y parsear las fechas
+    if fecha_inicio:
+        fecha_inicio = parse_datetime(fecha_inicio)
+    if fecha_fin:
+        fecha_fin = parse_datetime(fecha_fin)
+    
+    # Validar si las fechas son válidas
+    if (fecha_inicio and not fecha_fin) or (fecha_fin and not fecha_inicio):
+        return Response({"message": "Ambas fechas deben estar presentes para el filtro."}, status=400)
+
+    # Filtrar pedidos que tienen estado "entregado"
+    pedidos_entregados = Pedido.objects.filter(estado__iexact="entregado")
+
+    # Filtrar por rango de fechas si ambos valores están presentes
+    if fecha_inicio and fecha_fin:
+        pedidos_entregados = pedidos_entregados.filter(creado_en__range=(fecha_inicio, fecha_fin))
+
+    # Obtener los IDs de los pedidos entregados
+    pedidos_ids = pedidos_entregados.values_list('id', flat=True)
+
+    # Crear el queryset base de DetallePedido filtrando solo por los pedidos entregados
+    queryset = DetallePedido.objects.filter(id_pedido__in=pedidos_ids,id_promocion__isnull=False)
+
+    # Filtrar por id_producto si se proporciona
+    if id_promocion:
+        queryset = queryset.filter(id_promocion=id_promocion)
+
+    # Agrupar y sumar ventas
+    ventas_promocion = (
+        queryset
+        .values('id_promocion')
+        .annotate(total_ventas=Sum('cantidad'))
+        .order_by('-total_ventas')
+    )
+
+    # Manejar caso en el que no haya resultados
+    if not ventas_promocion:
+        return Response({"message": "No se encontraron ventas para los criterios especificados."}, status=404)
+    
+    return Response(ventas_promocion)
 
 @api_view(['GET'])
 def cantidad_ciudades_con_ventas(request):
@@ -405,3 +478,7 @@ class TipoProductoSubcategoriaViewSet(viewsets.ModelViewSet):
 class ProductoSubcategoriaViewSet(viewsets.ModelViewSet):
     queryset = ProductoSubcategoria.objects.all()
     serializer_class = ProductoSubcategoriaSerializer
+
+class PromocionViewSet(viewsets.ModelViewSet):
+    queryset = Promocion.objects.all()
+    serializer_class = PromocionSerializer
