@@ -270,7 +270,8 @@ class Pedido(models.Model):
     actualizado_en = models.DateTimeField(auto_now=True, db_column='actualizadoen')
     usuario_creacion = models.CharField(max_length=50, db_column='usuariocreacion')
     usuario_actualizacion = models.CharField(max_length=50, db_column='usuarioactualizacion')
-
+    pagado = models.BooleanField(default=False, db_column='pagado')
+    pagadoen = models.DateTimeField(null=True, blank=True, db_column='pagadoen') 
     class Meta:
         db_table = 'vi_pedido'
 

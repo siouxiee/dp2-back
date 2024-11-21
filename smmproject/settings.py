@@ -118,7 +118,7 @@ DATABASES = {
         'NAME': 'villaizan',
         'USER': 'postgres',
         'PASSWORD': 'S2vwLU8uJMf',
-		'HOST': 'ecommerce-db.cy6fsvtblkt9.us-east-1.rds.amazonaws.com',
+		'HOST': 'villaizandb.cblfdho3pkze.us-east-1.rds.amazonaws.com',
         'PORT': '5432',
     }
 }
