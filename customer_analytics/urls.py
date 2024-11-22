@@ -32,6 +32,7 @@ router.register(r'tipo-producto-subcategorias', TipoProductoSubcategoriaViewSet)
 router.register(r'producto-subcategorias', ProductoSubcategoriaViewSet)
 router.register(r'promociones', PromocionViewSet)
 
+
 urlpatterns = [
     path('', include(router.urls)),
     path('ventas-por-producto/', ventas_por_producto, name='ventas-por-producto'),

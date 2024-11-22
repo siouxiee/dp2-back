@@ -13,7 +13,8 @@ class Persona(models.Model):
     actualizado_en = models.DateTimeField(auto_now=True,db_column='actualizadoen')
     usuario_creacion = models.CharField(max_length=50,db_column='usuariocreacion') 
     usuario_actualizacion = models.CharField(max_length=50,db_column='usuarioactualizacion') 
-
+    edad = models.IntegerField(null=True, blank=True,db_column='edad')
+    sexo = models.CharField(max_length=25, null=True, blank=True,db_column='sexo')
     class Meta:
         db_table = 'vi_persona'  # Nombre correcto de la tabla
 

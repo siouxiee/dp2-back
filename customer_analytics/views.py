@@ -21,7 +21,43 @@ from .serializers import (
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Sum, F
+from django.db.models import Count, Case, When, IntegerField,CharField,Value
 
+@api_view(['GET'])
+def pedidos_por_rangos_edades(request):
+    # Obtener las fechas de inicio y fin del rango
+    fecha_inicio = request.query_params.get('fecha_inicio')
+    fecha_fin = request.query_params.get('fecha_fin')
+    
+    # Validar y parsear las fechas
+    if fecha_inicio:
+        fecha_inicio = parse_datetime(fecha_inicio)
+    if fecha_fin:
+        fecha_fin = parse_datetime(fecha_fin)
+    
+    # Validar si las fechas son válidas
+    if (fecha_inicio and not fecha_fin) or (fecha_fin and not fecha_inicio):
+        return Response({"message": "Ambas fechas deben estar presentes para el filtro."}, status=400)
+    
+    # Filtrar pedidos por rango de fechas y estado
+    pedidos = Pedido.objects.filter(estado__iexact="entregado")
+    if fecha_inicio and fecha_fin:
+        pedidos = pedidos.filter(creado_en__range=(fecha_inicio, fecha_fin))
+    
+    # Agrupar por rangos de edad
+    rangos_edades = pedidos.values(
+        rango_edad=Case(
+            When(id_usuario__id_persona__edad__gte=18, id_usuario__id_persona__edad__lt=20, then=Value('18-19')),
+            When(id_usuario__id_persona__edad__gte=20, id_usuario__id_persona__edad__lt=27, then=Value('20-26')),
+            When(id_usuario__id_persona__edad__gte=27, id_usuario__id_persona__edad__lt=30, then=Value('27-29')),
+            When(id_usuario__id_persona__edad__gte=30, id_usuario__id_persona__edad__lt=40, then=Value('30-39')),
+            When(id_usuario__id_persona__edad__gte=40, id_usuario__id_persona__edad__lt=50, then=Value('40-49')),
+            When(id_usuario__id_persona__edad__gte=50, then=Value('50 o más')),
+            output_field=CharField()
+        )
+    ).annotate(total_pedidos=Count('id')).order_by('rango_edad')
+    
+    return Response(list(rangos_edades))
 
 @api_view(['GET'])
 def cantidad_pedidos_cancelados(request):
