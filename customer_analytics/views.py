@@ -24,6 +24,89 @@ from django.db.models import Sum, F
 from django.db.models import Count, Case, When, IntegerField,CharField,Value
 
 @api_view(['GET'])
+def top_clientes_por_pedidos(request):
+    # Obtener las fechas de inicio y fin del rango
+    fecha_inicio = request.query_params.get('fecha_inicio')
+    fecha_fin = request.query_params.get('fecha_fin')
+    
+    # Validar y parsear las fechas
+    if fecha_inicio:
+        fecha_inicio = parse_datetime(fecha_inicio)
+    if fecha_fin:
+        fecha_fin = parse_datetime(fecha_fin)
+    
+    # Validar si las fechas son válidas
+    if (fecha_inicio and not fecha_fin) or (fecha_fin and not fecha_inicio):
+        return Response({"message": "Ambas fechas deben estar presentes para el filtro."}, status=400)
+
+    # Filtrar pedidos entregados
+    pedidos = Pedido.objects.filter(estado__iexact="entregado")
+    
+    # Aplicar filtro por rango de fechas si ambos valores están presentes
+    if fecha_inicio and fecha_fin:
+        pedidos = pedidos.filter(creado_en__range=(fecha_inicio, fecha_fin))
+    
+    # Agrupar por cliente (id_usuario) y contar la cantidad de pedidos por cliente
+    clientes_top = (
+        pedidos.values('id_usuario', 'id_usuario__nombre', 'id_usuario__apellido')  # Datos del cliente
+        .annotate(total_pedidos=Count('id'))  # Contar pedidos
+        .order_by('-total_pedidos')[:7]  # Ordenar de mayor a menor y limitar a 7
+    )
+
+    # Formatear los resultados
+    resultado = [
+        {
+            "id_usuario": cliente['id_usuario'],
+            "nombre": cliente['id_usuario__nombre'],
+            "apellido": cliente['id_usuario__apellido'],
+            "total_pedidos": cliente['total_pedidos']
+        }
+        for cliente in clientes_top
+    ]
+    
+    return Response(resultado)
+
+@api_view(['GET'])
+def edades_frecuentes_clientes(request):
+    # Obtener las fechas de inicio y fin del rango
+    fecha_inicio = request.query_params.get('fecha_inicio')
+    fecha_fin = request.query_params.get('fecha_fin')
+    
+    # Validar y parsear las fechas
+    if fecha_inicio:
+        fecha_inicio = parse_datetime(fecha_inicio)
+    if fecha_fin:
+        fecha_fin = parse_datetime(fecha_fin)
+    
+    # Validar si las fechas son válidas
+    if (fecha_inicio and not fecha_fin) or (fecha_fin and not fecha_inicio):
+        return Response({"message": "Ambas fechas deben estar presentes para el filtro."}, status=400)
+    
+    # Filtrar pedidos entregados por rango de fechas
+    pedidos = Pedido.objects.filter(estado__iexact="entregado")
+    if fecha_inicio and fecha_fin:
+        pedidos = pedidos.filter(creado_en__range=(fecha_inicio, fecha_fin))
+    
+    # Obtener los IDs de los usuarios con pedidos entregados
+    usuarios_ids = pedidos.values_list('id_usuario', flat=True)
+    
+    # Contar la frecuencia de edades de los usuarios
+    frecuencias_edades = (
+        Usuario.objects.filter(id__in=usuarios_ids)
+        .values('id_persona__edad')  # Agrupar por edad
+        .annotate(cantidad=Count('id'))  # Contar la cantidad de usuarios con esa edad
+        .order_by('-cantidad')  # Ordenar por la frecuencia de edad
+    )
+    
+    # Formatear los resultados
+    resultado = [
+        {"edad": item['id_persona__edad'], "cantidad": item['cantidad']}
+        for item in frecuencias_edades
+    ]
+    
+    return Response(resultado)
+
+@api_view(['GET'])
 def pedidos_por_rangos_edades(request):
     # Obtener las fechas de inicio y fin del rango
     fecha_inicio = request.query_params.get('fecha_inicio')
@@ -124,12 +207,21 @@ def ventas_por_promocion(request, id_promocion=None):
         .annotate(total_ventas=Sum('cantidad'))
         .order_by('-total_ventas')
     )
-
+    
     # Manejar caso en el que no haya resultados
     if not ventas_promocion:
         return Response({"message": "No se encontraron ventas para los criterios especificados."}, status=404)
     
-    return Response(ventas_promocion)
+    resultado = [
+        {
+            "id_promocion": item['id_promocion'],
+            "nombre_promocion": item['id_promocion__nombre'],  # Nombre de la promoción
+            "total_ventas": item['total_ventas']
+        }
+        for item in ventas_promocion
+    ]
+    
+    return Response(resultado)
 
 @api_view(['GET'])
 def cantidad_ciudades_con_ventas(request):
