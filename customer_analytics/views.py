@@ -23,6 +23,8 @@ from rest_framework.response import Response
 from django.db.models import Sum, F
 from django.db.models import Count, Case, When, IntegerField,CharField,Value
 
+
+
 @api_view(['GET'])
 def top_clientes_por_pedidos(request):
     # Obtener las fechas de inicio y fin del rango
@@ -496,7 +498,6 @@ def ventas_por_producto(request, id_producto=None):
     return Response(ventas_producto)
 
 #final
-
 @api_view(['GET'])
 def ventas_totales_fecha(request):
     # Obtener parámetros de fecha de la solicitud
@@ -530,6 +531,36 @@ def ventas_totales_fecha(request):
 
     # Devolver la respuesta con el monto total
     return Response({"cantidades_totales": cantidad_total})
+
+
+@api_view(['GET'])
+def ventas_totales_monto(request):
+    # Obtener parámetros de fecha de la solicitud
+    fecha_inicio = request.query_params.get('fecha_inicio')
+    fecha_fin = request.query_params.get('fecha_fin')
+
+    # Validar y parsear las fechas
+    if fecha_inicio and fecha_fin:
+        fecha_inicio = parse_datetime(fecha_inicio)
+        fecha_fin = parse_datetime(fecha_fin)
+
+        if not fecha_inicio or not fecha_fin:
+            return Response({"message": "Formato de fecha no válido. Usar YYYY-MM-DD."}, status=400)
+    else:
+        return Response({"message": "Se requieren ambas fechas (fecha_inicio y fecha_fin)."}, status=400)
+
+    # Filtrar los pedidos entregados dentro del rango de fechas
+    pedidos_entregados = Pedido.objects.filter(
+        estado__iexact="entregado",
+        creado_en__range=(fecha_inicio, fecha_fin)
+    )
+
+    # Calcular el monto total sumando el atributo 'total'
+    monto_total = pedidos_entregados.aggregate(Sum('total'))['total__sum'] or 0
+
+    # Devolver la respuesta con el monto total
+    return Response({"monto_total": monto_total})
+
 
 class PersonaViewSet(viewsets.ModelViewSet):
     queryset = Persona.objects.all()
